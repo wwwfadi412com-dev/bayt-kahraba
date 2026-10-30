@@ -18,7 +18,7 @@ $bk_compact = ! empty( $args['compact'] );
 $bk_tabs    = bk_get_brand_hub_tabs( $bk_brand->term_id );
 $bk_accent  = $bk_meta['color'] ?: '#1E3A8A';
 ?>
-<section class="relative overflow-hidden bg-brand-navy text-white" style="--bk-accent: <?php echo esc_attr( $bk_accent ); ?>">
+<section class="bk-grid-dark relative overflow-hidden bg-brand-ink text-white" style="--bk-accent: <?php echo esc_attr( $bk_accent ); ?>">
 	<?php if ( $bk_meta['banner_id'] && ! $bk_compact ) : ?>
 		<?php echo wp_get_attachment_image( $bk_meta['banner_id'], 'bk-banner', false, array( 'class' => 'absolute inset-0 size-full object-cover opacity-30', 'fetchpriority' => 'high', 'alt' => '' ) ); ?>
 	<?php endif; ?>

@@ -52,7 +52,8 @@ $bk_power_opts = array(
 <div class="bk-container py-6 lg:py-10" x-data="catalog(<?php echo esc_attr( wp_json_encode( $bk_config ) ); ?>)" @popstate.window="fromUrl()">
 
 	<header class="mb-6 max-w-4xl">
-		<h1 class="text-2xl leading-snug lg:text-[32px]"><?php echo esc_html( $args['h1'] ?? '' ); ?></h1>
+		<span class="bk-kicker bk-ltr">Catalog · <?php echo (int) $wp_query->found_posts; ?> items</span>
+		<h1 class="mt-2 text-[30px] leading-[1.15] lg:text-[46px]"><?php echo esc_html( $args['h1'] ?? '' ); ?></h1>
 		<?php if ( ! empty( $args['intro_html'] ) ) : ?>
 			<div class="bk-prose mt-3 text-[15px] text-brand-body"><?php echo wp_kses_post( $args['intro_html'] ); ?></div>
 		<?php endif; ?>
@@ -85,7 +86,7 @@ $bk_power_opts = array(
 		<aside class="min-w-0 lg:col-span-3">
 			<div class="fixed inset-0 z-[70] hidden lg:static lg:z-auto lg:block" :class="{ '!block': filtersOpen }" x-trap.noscroll="filtersOpen && window.innerWidth < 1024">
 				<div class="bk-overlay lg:hidden" @click="filtersOpen = false"></div>
-				<form class="absolute inset-y-0 end-0 flex w-[88%] max-w-sm flex-col overflow-y-auto bg-white p-5 lg:static lg:w-auto lg:max-w-none lg:overflow-visible lg:rounded-xl2 lg:border lg:border-brand-line lg:shadow-card lg:sticky lg:top-[calc(var(--bk-header-h)+4rem)]"
+				<form class="absolute inset-y-0 end-0 flex w-[88%] max-w-sm flex-col overflow-y-auto bg-brand-card p-5 lg:static lg:w-auto lg:max-w-none lg:overflow-visible lg:rounded-xl2 lg:border lg:border-brand-line lg:shadow-card lg:sticky lg:top-[calc(var(--bk-header-h)+4rem)]"
 					method="get" @submit.prevent="apply()" aria-label="<?php esc_attr_e( 'تصفية المنتجات', 'baytkahraba' ); ?>">
 					<div class="mb-4 flex items-center justify-between">
 						<p class="flex items-center gap-2 font-bold text-brand-ink"><?php bk_the_icon( 'filter', 'size-5 text-brand-royal' ); ?><?php esc_html_e( 'تصفية النتائج', 'baytkahraba' ); ?></p>

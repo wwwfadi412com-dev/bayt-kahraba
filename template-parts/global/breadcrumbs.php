@@ -13,7 +13,7 @@ if ( count( $bk_crumbs ) < 2 ) {
 }
 $bk_last = count( $bk_crumbs ) - 1;
 ?>
-<nav class="border-b border-brand-line bg-white" aria-label="<?php esc_attr_e( 'مسار التنقل', 'baytkahraba' ); ?>">
+<nav class="border-b border-brand-line" aria-label="<?php esc_attr_e( 'مسار التنقل', 'baytkahraba' ); ?>">
 	<ol class="bk-container bk-scrollbar-none flex items-center gap-1.5 overflow-x-auto whitespace-nowrap py-2.5 text-[13px] text-brand-muted">
 		<?php foreach ( $bk_crumbs as $bk_i => $bk_crumb ) : ?>
 			<li class="flex items-center gap-1.5">

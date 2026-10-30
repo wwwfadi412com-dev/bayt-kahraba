@@ -49,7 +49,8 @@ while ( have_posts() ) :
 			<!-- Gallery -->
 			<div class="min-w-0 lg:col-span-6">
 				<div class="lg:sticky lg:top-[calc(var(--bk-header-h)+4rem)]">
-					<div class="relative grid aspect-square place-items-center overflow-hidden rounded-2xl bg-white ring-1 ring-brand-line">
+					<div class="bk-grid-paper relative grid aspect-square place-items-center overflow-hidden rounded-xl2 border border-brand-line bg-brand-card">
+						<span class="bk-mono bk-ltr absolute bottom-4 end-4 z-10 text-[11px] text-brand-muted"><?php echo esc_html( $bk_model ); ?></span>
 						<div class="absolute start-4 top-4 z-10 flex flex-col items-start gap-2">
 							<?php bk_part( 'template-parts/product/energy-badge', array( 'power' => $bk_power, 'size' => 'sm' ) ); ?>
 							<?php if ( $product->is_on_sale() ) : ?>
@@ -68,7 +69,7 @@ while ( have_posts() ) :
 										'woocommerce_single',
 										false,
 										array(
-											'class'         => 'max-h-full w-auto object-contain',
+											'class'         => 'max-h-full w-auto object-contain mix-blend-multiply',
 											'alt'           => $product->get_name(),
 											'sizes'         => '(min-width: 1024px) 600px, 100vw',
 											'fetchpriority' => 0 === $bk_i ? 'high' : 'auto',
@@ -79,13 +80,13 @@ while ( have_posts() ) :
 								</div>
 							<?php endforeach; ?>
 						<?php else : ?>
-							<img src="<?php echo esc_attr( bk_placeholder_src() ); ?>" alt="" class="size-3/4 object-contain" width="400" height="400">
+							<span class="text-brand-ink"><?php bk_the_icon( $bk_cat ? bk_category_icon( $bk_cat->term_id ) : 'bolt', 'size-48 stroke-[1.1] lg:size-64' ); ?></span>
 						<?php endif; ?>
 					</div>
 					<?php if ( count( $bk_gallery ) > 1 ) : ?>
 						<div class="bk-rail mt-3">
 							<?php foreach ( $bk_gallery as $bk_i => $bk_img ) : ?>
-								<button type="button" class="size-20 overflow-hidden rounded-xl bg-white p-1.5 ring-2 transition" :class="slide === <?php echo (int) $bk_i; ?> ? 'ring-brand-amber' : 'ring-brand-line hover:ring-slate-300'" @click="slide = <?php echo (int) $bk_i; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'صورة %d', 'baytkahraba' ), $bk_i + 1 ) ); ?>">
+								<button type="button" class="size-20 overflow-hidden rounded-xl bg-brand-card p-1.5 ring-2 transition" :class="slide === <?php echo (int) $bk_i; ?> ? 'ring-brand-ink' : 'ring-brand-line hover:ring-black/30'" @click="slide = <?php echo (int) $bk_i; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'صورة %d', 'baytkahraba' ), $bk_i + 1 ) ); ?>">
 									<?php echo wp_get_attachment_image( $bk_img, 'bk-thumb', false, array( 'class' => 'size-full object-contain' ) ); ?>
 								</button>
 							<?php endforeach; ?>
@@ -98,9 +99,9 @@ while ( have_posts() ) :
 			<div class="min-w-0 space-y-5 lg:col-span-6">
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<?php if ( $bk_brand ) : ?>
-						<a href="<?php echo esc_url( get_term_link( $bk_brand ) ); ?>" class="inline-flex items-center gap-2 rounded-xl bg-white px-3 py-1.5 ring-1 ring-brand-line hover:ring-brand-royal">
-							<?php echo bk_brand_logo( $bk_brand, 'h-7 w-auto max-w-[90px] object-contain text-xs', 'thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-							<span class="text-xs font-semibold text-brand-royal"><?php echo esc_html( bk_brand_meta( $bk_brand )['agent'] ); ?></span>
+						<a href="<?php echo esc_url( get_term_link( $bk_brand ) ); ?>" class="inline-flex items-center gap-2.5 rounded-full border border-black/20 bg-brand-card py-1 pe-3 ps-1 transition hover:border-brand-ink">
+							<span class="rounded-full bg-brand-ink px-3 py-1 font-display text-sm font-extrabold text-brand-paper"><?php echo esc_html( $bk_brand->name ); ?></span>
+							<span class="text-xs font-medium text-brand-ink-2"><?php echo esc_html( bk_brand_meta( $bk_brand )['agent'] ); ?></span>
 						</a>
 					<?php endif; ?>
 					<?php if ( $product->get_review_count() ) : ?>
@@ -109,21 +110,42 @@ while ( have_posts() ) :
 				</div>
 
 				<div>
-					<h1 class="text-2xl leading-snug lg:text-[30px]"><?php the_title(); ?></h1>
-					<p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-brand-muted">
+					<h1 class="text-[28px] leading-[1.2] lg:text-[40px]"><?php the_title(); ?></h1>
+					<p class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-brand-muted">
 						<?php if ( $bk_model ) : ?>
-							<span><?php esc_html_e( 'الموديل:', 'baytkahraba' ); ?> <span class="bk-ltr bk-sku font-semibold text-brand-body"><?php echo esc_html( $bk_model ); ?></span></span>
+							<span><?php esc_html_e( 'الموديل', 'baytkahraba' ); ?> <span class="bk-mono bk-ltr font-semibold text-brand-ink"><?php echo esc_html( $bk_model ); ?></span></span>
 						<?php endif; ?>
-						<span class="<?php echo $product->is_in_stock() ? 'text-brand-emerald-hover' : 'text-red-600'; ?> font-semibold"><?php echo $product->is_in_stock() ? esc_html__( '● متوفر في المحل', 'baytkahraba' ) : esc_html__( '● غير متوفر حالياً', 'baytkahraba' ); ?></span>
+						<span class="inline-flex items-center gap-1.5 font-semibold <?php echo $product->is_in_stock() ? 'text-brand-sun-ink' : 'text-brand-volt-ink'; ?>">
+							<span class="size-2 rounded-full <?php echo $product->is_in_stock() ? 'bg-brand-sun' : 'bg-brand-volt'; ?>"></span>
+							<?php echo $product->is_in_stock() ? esc_html__( 'متوفر في المحل', 'baytkahraba' ) : esc_html__( 'غير متوفر حالياً', 'baytkahraba' ); ?>
+						</span>
 					</p>
 				</div>
 
-				<div class="rounded-2xl bg-white p-5 ring-1 ring-brand-line">
-					<p class="bk-price text-3xl"><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
-					<p class="mt-1 flex items-center gap-1.5 text-sm text-brand-emerald-hover"><?php bk_the_icon( 'store', 'size-4' ); ?><?php esc_html_e( 'نفس سعر المحل بدون زيادات — محدّث اليوم', 'baytkahraba' ); ?></p>
+				<div class="flex flex-wrap items-end justify-between gap-3 border-y border-black/20 py-5">
+					<div>
+						<p class="bk-price text-[34px] leading-none lg:text-[42px]"><?php echo wp_kses_post( $product->get_price_html() ); ?></p>
+						<p class="mt-2 flex items-center gap-1.5 text-sm text-brand-sun-ink"><?php bk_the_icon( 'store', 'size-4' ); ?><?php esc_html_e( 'نفس سعر المحل بدون زيادات — محدّث اليوم', 'baytkahraba' ); ?></p>
+					</div>
+					<?php bk_part( 'template-parts/product/energy-badge', array( 'power' => $bk_power, 'size' => 'sm' ) ); ?>
 				</div>
 
-				<?php bk_part( 'template-parts/product/energy-badge', array( 'power' => $bk_power, 'size' => 'lg' ) ); ?>
+				<?php if ( $bk_power['wattage'] || $bk_power['ampere'] ) : ?>
+					<section class="bk-grid-dark rounded-xl2 bg-brand-ink p-5 text-brand-paper" aria-label="<?php esc_attr_e( 'البطاقة الكهربائية', 'baytkahraba' ); ?>">
+						<p class="font-mono text-[11px] uppercase tracking-label text-[#9C978C]">Electrical datasheet · <?php esc_html_e( 'البطاقة الكهربائية', 'baytkahraba' ); ?></p>
+						<dl class="mt-3 grid grid-cols-3 divide-x divide-x-reverse divide-white/10 text-center">
+							<div><dt class="text-xs text-[#9C978C]"><?php esc_html_e( 'الاستطاعة', 'baytkahraba' ); ?></dt><dd class="bk-mono bk-ltr mt-1 text-[22px] font-semibold"><?php echo $bk_power['wattage'] ? esc_html( number_format( $bk_power['wattage'] ) ) . '<small class="text-sm text-[#9C978C]">W</small>' : '—'; // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+							<div><dt class="text-xs text-[#9C978C]"><?php esc_html_e( 'السحب', 'baytkahraba' ); ?></dt><dd class="bk-mono bk-ltr mt-1 text-[22px] font-semibold text-brand-volt"><?php echo $bk_power['ampere'] ? esc_html( rtrim( rtrim( number_format( $bk_power['ampere'], 2, '.', '' ), '0' ), '.' ) ) . '<small class="text-sm text-[#9C978C]">A</small>' : '—'; // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+							<div><dt class="text-xs text-[#9C978C]"><?php esc_html_e( 'السعة', 'baytkahraba' ); ?></dt><dd class="mt-1 text-[15px] font-semibold leading-8"><?php echo esc_html( (string) $product->get_meta( '_bk_capacity' ) ?: '—' ); ?></dd></div>
+						</dl>
+						<?php if ( $bk_power['ampere'] ) : ?>
+							<div class="mt-4 [&_.text-brand-muted]:!text-[#9C978C]"><?php bk_part( 'template-parts/product/energy-scale', array( 'ampere' => $bk_power['ampere'] ) ); ?></div>
+						<?php endif; ?>
+						<?php if ( $bk_power['label'] ) : ?>
+							<p class="mt-3 flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 text-sm"><?php bk_the_icon( $bk_power['icon'], 'size-4 text-brand-sun' ); ?><?php echo esc_html( $bk_power['label'] ); ?></p>
+						<?php endif; ?>
+					</section>
+				<?php endif; ?>
 
 				<section aria-labelledby="bk-highlights">
 					<h2 id="bk-highlights" class="mb-2 text-base"><?php esc_html_e( 'أبرز المميزات باختصار', 'baytkahraba' ); ?></h2>

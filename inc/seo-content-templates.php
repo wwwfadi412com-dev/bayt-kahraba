@@ -218,6 +218,39 @@ function bk_category_profile( ?WP_Term $cat ): array {
 	return $profiles['generic'] + array( 'key' => 'generic' );
 }
 
+/**
+ * Line icon for a category: its own profile, else the first specific descendant's.
+ */
+function bk_category_icon( int $term_id ): string {
+	$map  = array(
+		'fridge'     => 'fridge',
+		'freezer'    => 'fridge',
+		'washer'     => 'washer',
+		'dishwasher' => 'washer',
+		'tv'         => 'tv',
+		'ac'         => 'ac',
+		'fan'        => 'fan',
+		'heater'     => 'sun',
+		'cooker'     => 'pot',
+		'microwave'  => 'pot',
+		'airfryer'   => 'pot',
+		'kitchen'    => 'pot',
+		'vacuum'     => 'vacuum',
+		'iron'       => 'bolt',
+	);
+	$term = get_term( $term_id, 'product_cat' );
+	$key  = $term instanceof WP_Term ? bk_category_profile( $term )['key'] : 'generic';
+	if ( 'generic' === $key ) {
+		foreach ( bk_get_child_categories( $term_id ) as $child ) {
+			$icon = bk_category_icon( $child['id'] );
+			if ( 'bolt' !== $icon ) {
+				return $icon;
+			}
+		}
+	}
+	return $map[ $key ] ?? 'bolt';
+}
+
 /* -------------------------------------------------------------------------
  * Search synonym expansion (براد ↔ ثلاجة، شاشة ↔ تلفزيون …)
  * ---------------------------------------------------------------------- */

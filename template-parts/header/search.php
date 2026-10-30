@@ -13,17 +13,17 @@ $bk_uid = wp_unique_id( 'bk-search-' );
 	<input type="hidden" name="post_type" value="product">
 	<div class="relative">
 		<input id="<?php echo esc_attr( $bk_uid ); ?>" type="search" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" autocomplete="off"
-			class="h-11 w-full rounded-xl border-0 bg-white ps-11 pe-24 text-sm text-brand-ink shadow-inner placeholder:text-slate-400 focus:ring-4 focus:ring-brand-amber/40"
+			class="h-11 w-full rounded-xl border border-black/20 bg-brand-card ps-11 pe-20 text-sm text-brand-ink placeholder:text-brand-muted focus:border-brand-ink focus:outline-none focus:ring-4 focus:ring-brand-volt/15"
 			placeholder="<?php esc_attr_e( 'ابحث: براد بابين، غسالة أوتوماتيك، شاشة 55، مكيف إنفرتر…', 'baytkahraba' ); ?>"
 			x-model="q" @input.debounce.250ms="search()" @focus="q.length > 1 && (open = true)"
 			@keydown.arrow-down.prevent="move(1)" @keydown.arrow-up.prevent="move(-1)" @keydown.enter="enter($event)"
 			role="combobox" aria-autocomplete="list" :aria-expanded="open" aria-controls="<?php echo esc_attr( $bk_uid ); ?>-list">
-		<span class="pointer-events-none absolute inset-y-0 start-3 grid place-items-center text-slate-400"><?php bk_the_icon( 'search', 'size-5' ); ?></span>
-		<button type="submit" class="absolute inset-y-1 end-1 rounded-lg bg-brand-amber px-4 text-sm font-semibold text-brand-navy hover:bg-brand-amber-hover hover:text-white"><?php esc_html_e( 'بحث', 'baytkahraba' ); ?></button>
+		<span class="pointer-events-none absolute inset-y-0 start-3.5 grid place-items-center text-brand-muted"><?php bk_the_icon( 'search', 'size-[18px]' ); ?></span>
+		<button type="submit" class="absolute inset-y-1.5 end-1.5 rounded-lg bg-brand-ink px-3.5 text-[13px] font-semibold text-brand-paper transition hover:bg-brand-volt"><?php esc_html_e( 'بحث', 'baytkahraba' ); ?></button>
 	</div>
 
 	<div x-cloak x-show="open" x-transition.opacity.duration.150ms id="<?php echo esc_attr( $bk_uid ); ?>-list" role="listbox"
-		class="absolute inset-x-0 top-full z-[60] mt-2 max-h-[70vh] overflow-y-auto rounded-2xl border border-brand-line bg-white p-2 text-brand-ink shadow-lift">
+		class="absolute inset-x-0 top-full z-[60] mt-2 max-h-[70vh] overflow-y-auto rounded-2xl border border-brand-ink bg-brand-card p-2 text-brand-ink shadow-lift">
 		<template x-if="loading">
 			<div class="space-y-2 p-2"><div class="bk-skeleton h-12"></div><div class="bk-skeleton h-12"></div><div class="bk-skeleton h-12"></div></div>
 		</template>

@@ -11,6 +11,8 @@ import liveSearch from './components/liveSearch';
 import productPage from './components/productPage';
 import bundleBuilder from './components/bundleBuilder';
 import warranty from './components/warranty';
+import ampPlanner from './components/ampPlanner';
+import { reveal } from './lib/reveal';
 
 Alpine.plugin(collapse);
 Alpine.plugin(focus);
@@ -25,6 +27,8 @@ Alpine.data('liveSearch', liveSearch);
 Alpine.data('productPage', productPage);
 Alpine.data('bundleBuilder', bundleBuilder);
 Alpine.data('warranty', warranty);
+Alpine.data('ampPlanner', ampPlanner);
 
 window.Alpine = Alpine;
 Alpine.start();
+reveal();

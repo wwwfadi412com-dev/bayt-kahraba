@@ -324,6 +324,88 @@ function bk_similar_power_products( WC_Product $product, int $limit = 10 ): arra
 }
 
 /**
+ * Ampere planner data: a typical Syrian household, appliance by appliance in order
+ * of importance, each represented by the best-selling real product of that type
+ * (plus a fixed lighting/router baseline). Filter `bk_ampere_planner_profiles`.
+ *
+ * @return array<int, array{name: string, product: string, url: string, ampere: float}>
+ */
+function bk_ampere_planner_items(): array {
+	return (array) bk_remember(
+		'amp-planner',
+		static function () {
+			global $wpdb;
+			$priority = (array) apply_filters( 'bk_ampere_planner_profiles', array( 'fridge', 'tv', 'fan', 'washer', 'freezer', 'microwave', 'ac' ) );
+
+			// Leaf categories grouped by keyword profile.
+			$by_profile = array();
+			$walk       = static function ( array $nodes ) use ( &$walk, &$by_profile ) {
+				foreach ( $nodes as $node ) {
+					if ( ! $node['children'] ) {
+						$term = get_term( $node['id'], 'product_cat' );
+						if ( $term instanceof WP_Term ) {
+							$by_profile[ bk_category_profile( $term )['key'] ][] = (int) $term->term_taxonomy_id;
+						}
+					}
+					$walk( $node['children'] );
+				}
+			};
+			$walk( bk_get_category_tree() );
+
+			$items = array( array( 'name' => __( 'إنارة LED وراوتر وشحن موبايلات', 'baytkahraba' ), 'product' => '', 'url' => '', 'ampere' => 0.45 ) );
+			foreach ( $priority as $key ) {
+				if ( empty( $by_profile[ $key ] ) ) {
+					continue;
+				}
+				$in = implode( ',', array_map( 'intval', $by_profile[ $key ] ) );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$row = $wpdb->get_row(
+					"SELECT p.ID, CAST(amp.meta_value AS DECIMAL(10,2)) AS amp
+					 FROM {$wpdb->posts} p
+					 INNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = p.ID AND tr.term_taxonomy_id IN ({$in})
+					 INNER JOIN {$wpdb->postmeta} amp ON amp.post_id = p.ID AND amp.meta_key = '_ampere_draw'
+					 LEFT JOIN {$wpdb->postmeta} ts ON ts.post_id = p.ID AND ts.meta_key = 'total_sales'
+					 WHERE p.post_type = 'product' AND p.post_status = 'publish' AND CAST(amp.meta_value AS DECIMAL(10,2)) > 0
+					 ORDER BY CAST(ts.meta_value AS UNSIGNED) DESC, amp ASC LIMIT 1"
+				);
+				if ( $row ) {
+					$items[] = array(
+						'name'    => (string) bk_keyword_profiles()[ $key ]['label'],
+						'product' => get_the_title( (int) $row->ID ),
+						'url'     => (string) get_permalink( (int) $row->ID ),
+						'ampere'  => (float) $row->amp,
+					);
+				}
+			}
+			return $items;
+		}
+	);
+}
+
+/**
+ * Number of published products that run on low ampere / solar (ticker, hero, home tiles).
+ */
+function bk_power_friendly_total(): int {
+	return (int) bk_remember(
+		'power-friendly-total',
+		static function () {
+			$q = new WP_Query(
+				array(
+					'post_type'              => 'product',
+					'post_status'            => 'publish',
+					'posts_per_page'         => 1,
+					'fields'                 => 'ids',
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
+					'meta_query'             => array( array( 'key' => '_solar_inverter_friendly', 'value' => array( 'solar_ready', 'low_amp' ), 'compare' => 'IN' ) ), // phpcs:ignore WordPress.DB.SlowDBQuery
+				)
+			);
+			return (int) $q->found_posts;
+		}
+	);
+}
+
+/**
  * Filtered URLs are for humans — keep them out of the index (canonical stays clean).
  */
 add_filter(

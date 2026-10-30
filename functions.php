@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BK_VERSION', '1.0.1' );
+define( 'BK_VERSION', '1.1.0' );
 define( 'BK_DIR', get_template_directory() );
 define( 'BK_URI', get_template_directory_uri() );
 define( 'BK_REST_NS', 'bk/v1' );

@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ar-SY" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>فولت — مفهوم تصميم بيت الكهرباء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --paper:#F2EFE8; --paper-2:#E8E3D7; --card:#FBFAF7; --ink:#121212; --ink-2:#2B2A28; --muted:#6E6A62;
+  --line:rgba(18,18,18,.12); --line-2:rgba(18,18,18,.22);
+  --volt:#FF5B1F; --volt-ink:#B83A0A; --volt-soft:#FFE3D6; --sun:#12A150; --sun-soft:#DDF3E6;
+  --r:18px; --display:'Alexandria',sans-serif; --body:'IBM Plex Sans Arabic',sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+.grid-paper{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:28px 28px}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* Ticker */
+.ticker{background:var(--ink);color:var(--paper);font-size:12.5px;overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;gap:48px;padding:9px 0;animation:tick 38s linear infinite}
+.ticker-track span{display:inline-flex;align-items:center;gap:8px}
+.ticker-track i{color:var(--volt)}
+.ticker b{color:var(--volt);font-weight:500}
+@keyframes tick{to{transform:translateX(50%)}}
+
+/* Header */
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:28px;height:76px}
+.logo{display:flex;align-items:center;gap:12px}
+.mark{width:42px;height:42px;border-radius:12px;background:var(--ink);display:grid;place-items:center;position:relative}
+.mark svg{width:24px;height:24px}
+.word{font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.02em;line-height:1}
+.word small{display:block;font-family:var(--mono);font-weight:500;font-size:9.5px;letter-spacing:.2em;color:var(--muted);margin-top:5px}
+nav.main{display:flex;gap:4px;font-size:14.5px;font-weight:500}
+nav.main a{padding:8px 14px;border-radius:99px;transition:.2s}
+nav.main a:hover{background:var(--paper-2)}
+nav.main a.on{background:var(--ink);color:var(--paper)}
+.cmd{flex:1;max-width:380px;margin-inline-start:auto;display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border:1px solid var(--line-2);border-radius:12px;background:var(--card);color:var(--muted);font-size:14px}
+.cmd kbd{margin-inline-start:auto;font-family:var(--mono);font-size:11px;border:1px solid var(--line-2);border-radius:6px;padding:1px 6px}
+.icon-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--line-2);display:grid;place-items:center;font-size:20px;position:relative;background:var(--card)}
+.icon-btn .n{position:absolute;top:-6px;left:-6px;min-width:20px;height:20px;border-radius:99px;background:var(--volt);color:#fff;font:600 11px/20px var(--mono);text-align:center;padding:0 5px}
+
+/* Hero */
+.hero{padding:56px 0 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:stretch}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;padding:6px 12px;border:1px solid var(--line-2);border-radius:99px;background:var(--card)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--sun);box-shadow:0 0 0 4px var(--sun-soft);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px transparent}}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(46px,7.4vw,104px);line-height:1.02;letter-spacing:-.035em;margin:22px 0 22px}
+h1 .v{color:var(--volt)}
+h1 .strike{position:relative;white-space:nowrap}
+h1 .strike::after{content:"";position:absolute;inset-inline:-.04em;bottom:.16em;height:.09em;border-radius:99px;background:var(--volt);transform:skewX(-12deg);opacity:.9;z-index:-1}
+.lede{font-size:18px;max-width:560px;color:var(--ink-2)}
+.ctas{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 24px;border-radius:14px;font-weight:600;font-size:15.5px;transition:.2s}
+.btn-volt{background:var(--volt);color:#fff;box-shadow:0 8px 24px -10px var(--volt)}
+.btn-volt:hover{background:var(--volt-ink);transform:translateY(-2px)}
+.btn-line{border:1.5px solid var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--paper)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:40px;border-top:1px solid var(--line-2)}
+.stats div{padding:16px 0 0}
+.stats div+div{padding-inline-start:20px;border-inline-start:1px solid var(--line)}
+.stats strong{display:block;font-family:var(--display);font-size:32px;font-weight:800;letter-spacing:-.02em}
+.stats span{font-size:13px;color:var(--muted)}
+
+/* Ampere planner */
+.planner{background:var(--ink);color:var(--paper);border-radius:28px;padding:28px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.planner::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.planner>*{position:relative}
+.planner .label{color:#9C978C}
+.planner h3{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.02em;margin:6px 0 18px;line-height:1.25}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#232323;padding:6px;border-radius:14px}
+.seg button{height:46px;border-radius:10px;font-family:var(--mono);font-weight:600;font-size:15px;color:#BDB7AA;transition:.2s}
+.seg button.on{background:var(--volt);color:#fff}
+.gauge{margin:22px 0 8px;height:16px;border-radius:8px;background:#262626;display:flex;overflow:hidden;gap:2px}
+.gauge i{display:block;height:100%;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.gmeta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12.5px;color:#BDB7AA}
+.gmeta b{color:#fff;font-weight:600}
+.fits{list-style:none;margin-top:18px;display:grid;gap:8px;flex:1}
+.fits li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:#1C1C1C;border:1px solid #2A2A2A;font-size:14.5px;transition:.3s}
+.fits li i.sw{width:10px;height:10px;border-radius:3px}
+.fits li .a{margin-inline-start:auto;font-family:var(--mono);font-size:12.5px;color:#BDB7AA}
+.fits li.off{opacity:.32;text-decoration:line-through;text-decoration-color:#555}
+.planner .go{margin-top:18px;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:14px;background:var(--paper);color:var(--ink);font-weight:600}
+.planner .go i{width:34px;height:34px;border-radius:50%;background:var(--volt);color:#fff;display:grid;place-items:center;font-size:18px}
+
+/* Section heads */
+section{padding:56px 0}
+.head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:26px}
+.head h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,44px);letter-spacing:-.025em;line-height:1.15}
+.head p{color:var(--muted);max-width:420px;font-size:15px}
+.more{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;border-bottom:1.5px solid var(--ink);padding-bottom:2px;white-space:nowrap}
+
+/* Bento categories */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:170px;gap:14px}
+.tile{position:relative;border-radius:var(--r);background:var(--card);border:1px solid var(--line);padding:20px;overflow:hidden;display:flex;flex-direction:column;transition:.25s}
+.tile:hover{border-color:var(--ink);transform:translateY(-3px)}
+.tile .idx{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tile h3{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.02em;margin-top:auto;line-height:1.2}
+.tile .cnt{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.tile .ic{position:absolute;inset-inline-end:-14px;top:14px;font-size:150px;line-height:1;color:var(--paper-2);transition:.3s}
+.tile:hover .ic{color:var(--volt-soft);transform:rotate(-6deg) scale(1.04)}
+.tile .ar{position:absolute;top:18px;inset-inline-end:18px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:.25s}
+.tile:hover .ar{background:var(--volt);border-color:var(--volt);color:#fff}
+.t1{grid-column:span 3;grid-row:span 2;background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.t1 .ic{color:#242424;font-size:300px;top:auto;bottom:-40px}
+.t1:hover .ic{color:#2c2c2c}
+.t1 h3{font-size:40px}
+.t1 .cnt,.t1 .idx{color:#9C978C}
+.t1 .ar{border-color:#3a3a3a}
+.t1 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.t1 .chips span{font-size:12.5px;padding:4px 10px;border:1px solid #3a3a3a;border-radius:99px;color:#D8D3C8}
+.t2{grid-column:span 3}
+.t3,.t4,.t5,.t6{grid-column:span 3}
+.t7{grid-column:span 2}.t8{grid-column:span 2}.t9{grid-column:span 2}
+.tile.sunny{background:var(--sun);color:#fff;border-color:var(--sun)}
+.tile.sunny .ic{color:rgba(255,255,255,.16)}
+.tile.sunny .cnt,.tile.sunny .idx{color:rgba(255,255,255,.8)}
+.tile.sunny .ar{border-color:rgba(255,255,255,.4)}
+
+/* Spec cards */
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.spec{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:.25s}
+.spec:hover{border-color:var(--ink);box-shadow:0 22px 40px -28px rgba(0,0,0,.45)}
+.plate{position:relative;height:210px;display:grid;place-items:center;border-bottom:1px solid var(--line)}
+.plate .ic{font-size:96px;color:var(--ink);transition:.4s}
+.spec:hover .plate .ic{transform:scale(1.07)}
+.plate .no{position:absolute;top:12px;inset-inline-start:14px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.plate .tag{position:absolute;top:10px;inset-inline-end:10px;display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--sun);color:#fff}
+.plate .tag.sale{background:var(--volt)}
+.plate .cmp{position:absolute;bottom:10px;inset-inline-start:10px;width:34px;height:34px;border-radius:10px;border:1px solid var(--line-2);background:var(--card);display:grid;place-items:center;font-size:17px;opacity:0;transition:.2s}
+.spec:hover .cmp{opacity:1}
+.body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.brandline{display:flex;justify-content:space-between;font-size:12.5px}
+.brandline b{font-weight:600}
+.brandline .mono{color:var(--muted);font-size:11.5px}
+.spec h4{font-size:16px;font-weight:600;line-height:1.5}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.readout div{padding:7px 8px;text-align:center}
+.readout div+div{border-inline-start:1px solid var(--line)}
+.readout small{display:block;font-size:10.5px;color:var(--muted)}
+.readout strong{font-family:var(--mono);font-size:13.5px;font-weight:600}
+.elabel{display:flex;gap:2px;height:8px;margin-top:2px}
+.elabel i{flex:1;border-radius:2px;opacity:.25}
+.elabel i.me{opacity:1;transform:scaleY(1.9)}
+.elabel-cap{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+.buy{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px}
+.price{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em}
+.price small{font-family:var(--body);font-size:12px;font-weight:500;color:var(--muted);margin-inline-start:4px}
+.price del{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.add{width:46px;height:46px;border-radius:14px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:21px;transition:.2s}
+.add:hover{background:var(--volt);transform:rotate(90deg)}
+
+/* Agents registry */
+.registry{border-top:1.5px solid var(--ink)}
+.row{display:grid;grid-template-columns:60px 1.4fr 1fr 1fr 1fr 48px;align-items:center;gap:16px;padding:22px 0;border-bottom:1px solid var(--line-2);transition:.25s}
+.row:hover{background:var(--card);padding-inline:16px}
+.row .i{font-family:var(--mono);color:var(--muted);font-size:13px}
+.row .nm{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.02em}
+.row .k{font-size:12px;color:var(--muted);display:block}
+.row .v{font-family:var(--mono);font-weight:600;font-size:15px;direction:ltr;unicode-bidi:isolate;display:inline-block}
+.row .go{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:.25s}
+.row:hover .go{background:var(--volt);color:#fff;border-color:var(--volt);transform:rotate(-45deg)}
+
+/* Bundle */
+.bundle{background:var(--volt);color:#fff;border-radius:32px;padding:48px;display:grid;grid-template-columns:1fr 1.4fr;gap:40px;position:relative;overflow:hidden}
+.bundle::after{content:"";position:absolute;inset-inline-start:-80px;bottom:-120px;width:360px;height:360px;border-radius:50%;border:60px solid rgba(255,255,255,.1)}
+.bundle h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4.4vw,58px);line-height:1.05;letter-spacing:-.03em}
+.bundle p{margin-top:14px;font-size:16.5px;opacity:.92}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:1}
+.tier{background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.tier.hot{background:#fff;color:var(--ink);border-color:#fff;transform:translateY(-10px)}
+.tier .label{color:inherit;opacity:.7}
+.tier strong{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.tier ul{list-style:none;font-size:13.5px;display:grid;gap:4px;opacity:.9}
+.tier ul li::before{content:"— "}
+.tier .pick{margin-top:auto;height:42px;border-radius:12px;border:1.5px solid currentColor;font-weight:600}
+.tier.hot .pick{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* Promise band */
+.promise{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);border-radius:24px;overflow:hidden;background:var(--card)}
+.promise div{padding:26px 24px}
+.promise div+div{border-inline-start:1px solid var(--line-2)}
+.promise strong{display:block;font-family:var(--display);font-weight:900;font-size:46px;letter-spacing:-.04em;line-height:1}
+.promise strong em{font-style:normal;color:var(--volt)}
+.promise span{display:block;margin-top:10px;font-weight:600}
+.promise small{color:var(--muted);font-size:13px}
+
+/* Footer */
+footer{background:var(--ink);color:#BDB7AA;margin-top:56px;padding:56px 0 28px;overflow:hidden}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;font-size:14px}
+.fgrid h5{color:#fff;font-size:14px;margin-bottom:12px}
+.fgrid li{list-style:none;margin:6px 0}
+.giant{font-family:var(--display);font-weight:900;font-size:clamp(70px,15vw,230px);letter-spacing:-.05em;line-height:.85;color:#1E1E1E;margin-top:44px;white-space:nowrap}
+.giant span{color:var(--volt)}
+
+/* WhatsApp */
+.wa{position:fixed;bottom:22px;left:22px;z-index:40;display:flex;align-items:center;gap:10px;height:56px;padding:0 20px 0 8px;border-radius:99px;background:var(--sun);color:#fff;font-weight:600;box-shadow:0 14px 30px -12px rgba(18,161,80,.7)}
+.wa i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:22px}
+
+/* Reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:1100px){
+  nav.main{display:none}
+  .hero{grid-template-columns:1fr}
+  .rail{grid-template-columns:repeat(2,1fr)}
+  .bundle{grid-template-columns:1fr}
+  .promise{grid-template-columns:repeat(2,1fr)}
+  .promise div:nth-child(3){border-inline-start:0}
+  .promise div:nth-child(n+3){border-top:1px solid var(--line-2)}
+  .fgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:680px){
+  .wrap{padding:0 16px}
+  .bar{gap:10px;height:66px}
+  .cmd{display:none}
+  .word small{display:none}
+  .hero{padding-top:32px}
+  .lede{font-size:16px}
+  .stats strong{font-size:24px}
+  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+  .t1{grid-column:span 2;grid-row:span 2}
+  .t2,.t3,.t4,.t5,.t6,.t7,.t8,.t9{grid-column:span 1}
+  .tile h3{font-size:19px}.t1 h3{font-size:32px}
+  .tile .ic{font-size:110px}
+  .rail{grid-template-columns:1fr 1fr;gap:10px}
+  .plate{height:150px}.plate .ic{font-size:70px}
+  .readout strong{font-size:12px}
+  .price{font-size:18px}
+  .row{grid-template-columns:40px 1fr 44px;row-gap:6px}
+  .row .c3,.row .c4,.row .c5{display:none}
+  .row .nm{font-size:24px}
+  .bundle{padding:28px;border-radius:24px}
+  .tiers{grid-template-columns:1fr}
+  .tier.hot{transform:none}
+  .promise strong{font-size:34px}
+  .fgrid{grid-template-columns:1fr}
+  .wa span{display:none}.wa{padding:0 8px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="ticker" aria-label="شريط الأخبار">
+  <div class="ticker-track" id="ticker">
+    <span><i class="ti ti-currency-dollar"></i>سعر الصرف المعتمد اليوم <b class="mono ltr">13,000</b> ل.س</span>
+    <span><i class="ti ti-truck"></i>توصيل مجاني لباب البيت داخل دمشق وريفها القريب</span>
+    <span><i class="ti ti-shield-check"></i>كفالة الوكيل الحقيقية على كل جهاز</span>
+    <span><i class="ti ti-sun"></i><b>17</b> جهازاً يعمل على الأمبير والطاقة الشمسية</span>
+    <span><i class="ti ti-cash"></i>الدفع عند الاستلام · الهرم · الفؤاد · سيريتل كاش · شام كاش</span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#" aria-label="بيت الكهرباء">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 11.5 12 4l8.5 7.5" stroke="#F2EFE8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.2 9.5 9.6 14.6h3l-1 4.4 4.3-6h-3.1l.4-3.5Z" fill="#FF5B1F"/></svg>
+      </span>
+      <span class="word">بيت الكهرباء<small>BAYT AL-KAHRABA · DAMASCUS</small></span>
+    </a>
+    <nav class="main" aria-label="الأقسام">
+      <a href="#" class="on">الرئيسية</a><a href="#cats">الأقسام</a><a href="#agents">الوكلاء</a><a href="#bundle">جهّز بيتك</a><a href="#">الكفالة</a>
+    </nav>
+    <div class="cmd" role="search"><i class="ti ti-search"></i>براد بابين، شاشة 55، مكيف إنفرتر…<kbd>/</kbd></div>
+    <a class="icon-btn" href="#" aria-label="مقارنة"><i class="ti ti-arrows-left-right"></i></a>
+    <a class="icon-btn" href="#" aria-label="السلة"><i class="ti ti-shopping-bag"></i><span class="n">2</span></a>
+  </div>
+</header>
+
+<main>
+<div class="wrap hero">
+  <div class="rv">
+    <span class="kicker"><span class="dot"></span>أسعار اليوم · محدّثة بسعر المحل</span>
+    <h1>كهرباء <span class="strike">أقل.</span><br>بيت <span class="v">أكمل.</span></h1>
+    <p class="lede">كل جهاز عندنا يأتيك ببطاقة واضحة: كم واط، كم أمبير، وهل يعمل على الطاقة الشمسية. اختر بثقة، بسعر المحل نفسه، مع كفالة الوكيل الحقيقية.</p>
+    <div class="ctas">
+      <a class="btn btn-volt" href="#cats">تسوّق الأجهزة <i class="ti ti-arrow-left"></i></a>
+      <a class="btn btn-line" href="#bundle"><i class="ti ti-gift"></i>جهّز بيت العرسان</a>
+    </div>
+    <div class="stats">
+      <div><strong class="mono">26+</strong><span>موديل متوفر الآن</span></div>
+      <div><strong class="mono">04</strong><span>وكلاء رسميون</span></div>
+      <div><strong>0 <small style="font-size:14px">ل.س</small></strong><span>توصيل داخل دمشق</span></div>
+    </div>
+  </div>
+
+  <aside class="planner rv" aria-label="حاسبة الأمبير">
+    <span class="label">AMPERE PLANNER · حاسبة الأمبير</span>
+    <h3>كم أمبير عندك؟<br>نقلّك شو بيشتغل.</h3>
+    <div class="seg" role="radiogroup" aria-label="الاشتراك">
+      <button data-a="1">1A</button><button data-a="2" class="on">2A</button><button data-a="3">3A</button><button data-a="5">5A</button>
+    </div>
+    <div class="gauge" id="gauge"></div>
+    <div class="gmeta"><span>الحمل: <b id="used">0</b>A</span><span>المتاح: <b id="cap">2</b>A</span></div>
+    <ul class="fits" id="fits"></ul>
+    <a class="go" href="#">اعرض الأجهزة المناسبة لاشتراكي <i class="ti ti-arrow-left"></i></a>
+  </aside>
+</div>
+
+<section id="cats">
+  <div class="wrap">
+    <div class="head rv">
+      <div><span class="label">01 — CATALOG</span><h2>كل غرفة في البيت،<br>بقسم واحد.</h2></div>
+      <a class="more" href="#">كل الأقسام <i class="ti ti-arrow-left"></i></a>
+    </div>
+    <div class="bento">
+      <a class="tile t1 rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-fridge ic"></i><span class="idx">01 / 06</span><h3>الأجهزة المنزلية<br>الكبيرة</h3><span class="cnt">15 موديل · من 2,470,000 ل.س</span><div class="chips"><span>برادات بابين</span><span>فريزرات</span><span>غسالات</span><span>جلايات</span><span>طباخات</span></div></a>
+      <a class="tile t2 sunny rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-solar-panel ic"></i><span class="idx">02 / 06</span><h3>تعمل على الأمبير<br>والطاقة الشمسية</h3><span class="cnt">17 جهاز · سحب أقل من 2A</span></a>
+      <a class="tile t3 rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-device-tv ic"></i><span class="idx">03 / 06</span><h3>الشاشات والترفيه</h3><span class="cnt">3 موديلات · سمارت 4K</span></a>
+      <a class="tile t7 rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-air-conditioning ic"></i><span class="idx">04 / 06</span><h3>تكييف وتدفئة</h3><span class="cnt">4 موديلات</span></a>
+      <a class="tile t8 rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-tools-kitchen-2 ic"></i><span class="idx">05 / 06</span><h3>المطبخ والتحضير</h3><span class="cnt">3 موديلات</span></a>
+      <a class="tile t9 rv" href="#"><span class="ar"><i class="ti ti-arrow-up-left"></i></span><i class="ti ti-wash-machine ic"></i><span class="idx">06 / 06</span><h3>العناية بالمنزل</h3><span class="cnt">2 موديل</span></a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="head rv">
+      <div><span class="label">02 — DATASHEET</span><h2>اقرأ الجهاز<br>قبل ما تشتريه.</h2></div>
+      <p>كل بطاقة تعرض الاستطاعة والسحب ومقياس استهلاك ملوّن، فتعرف من النظرة الأولى إن كان الجهاز يناسب اشتراكك.</p>
+    </div>
+    <div class="rail" id="rail"></div>
+  </div>
+</section>
+
+<section id="agents">
+  <div class="wrap">
+    <div class="head rv">
+      <div><span class="label">03 — OFFICIAL AGENTS</span><h2>سجلّ الوكلاء.</h2></div>
+      <p>نتعامل مباشرة مع الوكلاء الرسميين فقط. كل كفالة حقيقية ولها مراكز صيانة في المحافظات.</p>
+    </div>
+    <div class="registry">
+      <a class="row rv" href="#"><span class="i mono">A/01</span><span class="nm">الحافظ</span><span class="c3"><span class="k">الكفالة</span><span class="v">24 MO</span></span><span class="c4"><span class="k">مراكز الصيانة</span><span class="v">03</span></span><span class="c5"><span class="k">موديلات</span><span class="v">08</span></span><span class="go"><i class="ti ti-arrow-left"></i></span></a>
+      <a class="row rv" href="#"><span class="i mono">A/02</span><span class="nm">العربي</span><span class="c3"><span class="k">الكفالة</span><span class="v">24 MO</span></span><span class="c4"><span class="k">مراكز الصيانة</span><span class="v">02</span></span><span class="c5"><span class="k">موديلات</span><span class="v">07</span></span><span class="go"><i class="ti ti-arrow-left"></i></span></a>
+      <a class="row rv" href="#"><span class="i mono">A/03</span><span class="nm">هنديكو</span><span class="c3"><span class="k">الكفالة</span><span class="v">12 MO</span></span><span class="c4"><span class="k">مراكز الصيانة</span><span class="v">02</span></span><span class="c5"><span class="k">موديلات</span><span class="v">06</span></span><span class="go"><i class="ti ti-arrow-left"></i></span></a>
+      <a class="row rv" href="#"><span class="i mono">A/04</span><span class="nm">رامكو</span><span class="c3"><span class="k">الكفالة</span><span class="v">24 MO</span></span><span class="c4"><span class="k">مراكز الصيانة</span><span class="v">02</span></span><span class="c5"><span class="k">موديلات</span><span class="v">05</span></span><span class="go"><i class="ti ti-arrow-left"></i></span></a>
+    </div>
+  </div>
+</section>
+
+<section id="bundle">
+  <div class="wrap">
+    <div class="bundle rv">
+      <div>
+        <span class="label" style="color:#fff;opacity:.8">04 — HOME SETUP</span>
+        <h2 style="margin-top:10px">جهّز بيتك<br>بثلاث نقرات.</h2>
+        <p>براد، غسالة، شاشة، طباخ وأدوات صغيرة. اختر الباقة، بدّل ما تريد، واحصل على خصم 5% إضافي على الباقة كاملة.</p>
+      </div>
+      <div class="tiers">
+        <div class="tier"><span class="label">ECONOMY</span><strong>الاقتصادية</strong><span class="mono">15.3M ل.س</span><ul><li>براد 14 قدم</li><li>غسالة حوضين</li><li>شاشة 43</li></ul><button class="pick">اختيار</button></div>
+        <div class="tier hot"><span class="label">SMART · الأكثر طلباً</span><strong>التوفير الذكي</strong><span class="mono">21.9M ل.س</span><ul><li>براد إنفرتر 16 قدم</li><li>غسالة أوتوماتيك 8 كغ</li><li>شاشة 55 أندرويد</li></ul><button class="pick">اختيار</button></div>
+        <div class="tier"><span class="label">PREMIUM</span><strong>الفاخرة</strong><span class="mono">32.1M ل.س</span><ul><li>براد 21 قدم + موزع</li><li>غسالة مع تنشيف</li><li>شاشة 65 HDR</li></ul><button class="pick">اختيار</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="promise rv">
+      <div><strong>0 <em>ل.س</em></strong><span>توصيل داخل دمشق</span><small>وريفها القريب، مع فحص الجهاز عند الاستلام</small></div>
+      <div><strong class="mono">1:1</strong><span>نفس سعر المحل</span><small>محدّث يومياً حسب سعر الصرف</small></div>
+      <div><strong class="mono">24<em>m</em></strong><span>كفالة الوكيل</span><small>بطاقة رسمية وتسجيل إلكتروني</small></div>
+      <div><strong class="mono">14</strong><span>محافظة نشحن إليها</span><small>بتغليف آمن وسعر رمزي</small></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div><h5>بيت الكهرباء</h5><p>شريك تجزئة وجملة مرتبط مباشرة بالوكلاء الرسميين في سوريا. دمشق، شارع الثورة.</p><p class="mono" style="margin-top:10px;color:#fff">0911 000 000</p></div>
+      <div><h5>الأقسام</h5><ul><li>الأجهزة الكبيرة</li><li>المطبخ</li><li>الشاشات</li><li>التكييف</li></ul></div>
+      <div><h5>الوكلاء</h5><ul><li>الحافظ</li><li>العربي</li><li>هنديكو</li><li>رامكو</li></ul></div>
+      <div><h5>خدمة العملاء</h5><ul><li>التحقق من الكفالة</li><li>سياسة التوصيل</li><li>حاسبة العرسان</li></ul></div>
+    </div>
+    <div class="giant">بيت الكهرباء<span>.</span></div>
+  </div>
+</footer>
+
+<a class="wa" href="#"><i class="ti ti-brand-whatsapp"></i><span>اطلب عبر واتساب</span></a>
+
+<script>
+const LOAD = [
+  ['إنارة LED (5 لمبات)', .3, '#F2EFE8'],
+  ['راوتر وشحن موبايلات', .15, '#BDB7AA'],
+  ['براد إنفرتر 16 قدم', .8, '#FF5B1F'],
+  ['شاشة سمارت 55', .55, '#FF9A6B'],
+  ['مروحة شحن', .15, '#12A150'],
+  ['غسالة حوضين', 1.9, '#5BC08A'],
+  ['مكيف إنفرتر 12000', 4.5, '#3D7BFF'],
+];
+function plan(cap){
+  let used = 0; const gauge = document.getElementById('gauge'); const fits = document.getElementById('fits');
+  gauge.innerHTML = ''; fits.innerHTML = '';
+  LOAD.forEach(([name, amp, color]) => {
+    const ok = used + amp <= cap + 1e-9;
+    if (ok) { used += amp; const seg = document.createElement('i'); seg.style.background = color; seg.style.width = '0%'; gauge.appendChild(seg); requestAnimationFrame(() => seg.style.width = (amp / cap * 100) + '%'); }
+    const li = document.createElement('li'); if (!ok) li.className = 'off';
+    li.innerHTML = '<i class="sw" style="background:' + color + '"></i>' + name + '<span class="a">' + amp.toFixed(2) + 'A</span>';
+    fits.appendChild(li);
+  });
+  document.getElementById('used').textContent = used.toFixed(2);
+  document.getElementById('cap').textContent = cap;
+}
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.seg button').forEach(x => x.classList.remove('on')); b.classList.add('on'); plan(+b.dataset.a);
+}));
+plan(2);
+
+const SCALE = ['#0B8F4D','#4DB648','#B5D334','#F6E31B','#F7A81B','#EE6A23','#E2231A'];
+const cls = a => a <= .5 ? 0 : a <= 1 ? 1 : a <= 2 ? 2 : a <= 4 ? 3 : a <= 6 ? 4 : a <= 9 ? 5 : 6;
+const NAMES = ['ممتاز جداً','ممتاز','اقتصادي','متوسط','مرتفع','عالٍ','عالٍ جداً'];
+const P = [
+  { no:'HF-RF16NF-INV', brand:'الحافظ', name:'براد بابين 16 قدم نوفروست إنفرتر', ic:'ti-fridge', w:180, a:.8, cap:'16FT', price:'6,760,000', tag:'يعمل على الطاقة الشمسية' },
+  { no:'AR-55AND4K', brand:'العربي', name:'شاشة 55 إنش سمارت أندرويد 4K', ic:'ti-device-tv', w:120, a:.55, cap:'55"', price:'5,460,000', tag:'يعمل على الطاقة الشمسية' },
+  { no:'HD-TT10', brand:'هنديكو', name:'غسالة حوضين 10 كغ نصف أوتوماتيك', ic:'ti-wash-machine', w:420, a:1.9, cap:'10KG', price:'2,470,000', tag:'' },
+  { no:'HF-AC12INV', brand:'الحافظ', name:'مكيف إنفرتر 12000 BTU تبريد وتدفئة', ic:'ti-air-conditioning', w:1100, a:4.5, cap:'12K', price:'6,760,000', tag:'' },
+  { no:'HD-RF16LI', brand:'هنديكو', name:'مروحة شحن 16 إنش بطارية ليثيوم', ic:'ti-propeller', w:30, a:.15, cap:'8H', price:'845,000', old:'975,000', tag:'-13%', sale:true },
+  { no:'RM-MW25G', brand:'رامكو', name:'مايكروويف 25 لتر مع شواية', ic:'ti-microwave', w:1000, a:4.5, cap:'25L', price:'1,820,000', tag:'' },
+  { no:'HF-CF300', brand:'الحافظ', name:'فريزر أفقي (صندوق) 300 لتر', ic:'ti-box', w:120, a:.6, cap:'300L', price:'4,420,000', tag:'يعمل على الطاقة الشمسية' },
+  { no:'HF-AF55', brand:'الحافظ', name:'قلاية هوائية 5.5 لتر ديجيتال', ic:'ti-cooker', w:1700, a:7.7, cap:'5.5L', price:'1,105,000', old:'1,235,000', tag:'-10%', sale:true },
+];
+document.getElementById('rail').innerHTML = P.map((p, i) => {
+  const c = cls(p.a);
+  return `<article class="spec rv">
+    <div class="plate grid-paper"><span class="no">${String(i + 1).padStart(2, '0')}</span>
+      ${p.tag ? `<span class="tag ${p.sale ? 'sale' : ''}">${p.sale ? '' : '<i class="ti ti-sun"></i>'}${p.tag}</span>` : ''}
+      <i class="ti ${p.ic} ic"></i><button class="cmp" aria-label="قارن"><i class="ti ti-arrows-left-right"></i></button></div>
+    <div class="body">
+      <div class="brandline"><b>${p.brand}</b><span class="mono ltr">${p.no}</span></div>
+      <h4>${p.name}</h4>
+      <div class="readout"><div><small>الاستطاعة</small><strong class="ltr">${p.w}W</strong></div><div><small>السحب</small><strong class="ltr">${p.a}A</strong></div><div><small>السعة</small><strong class="ltr">${p.cap}</strong></div></div>
+      <div><div class="elabel">${SCALE.map((col, k) => `<i style="background:${col}" class="${k === c ? 'me' : ''}"></i>`).join('')}</div>
+      <div class="elabel-cap"><span>الاستهلاك: <b style="color:${SCALE[c]}">${NAMES[c]}</b></span><span class="mono">≤ ${p.a}A</span></div></div>
+      <div class="buy"><span class="price">${p.old ? `<del>${p.old}</del>` : ''}${p.price}<small>ل.س</small></span><button class="add" aria-label="أضف للسلة"><i class="ti ti-plus"></i></button></div>
+    </div></article>`;
+}).join('');
+
+const t = document.getElementById('ticker'); t.innerHTML += t.innerHTML;
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>

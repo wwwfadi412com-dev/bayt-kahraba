@@ -66,20 +66,14 @@ function bk_frontend_config(): array {
 add_action(
 	'wp_head',
 	static function (): void {
-		foreach ( array( 400, 700 ) as $weight ) {
+		// Body text + the display weight used by the hero headline (the LCP element).
+		foreach ( array( 'ibm-plex-sans-arabic-arabic-400', 'alexandria-arabic-900', 'alexandria-arabic-800' ) as $font ) {
 			printf(
 				'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
-				esc_url( BK_URI . "/assets/fonts/ibm-plex-sans-arabic-arabic-{$weight}.woff2" )
+				esc_url( BK_URI . "/assets/fonts/{$font}.woff2" )
 			);
 		}
-		if ( is_front_page() && ( $hero = (int) bk_option( 'hero_image_id', 0 ) ) ) {
-			$src    = wp_get_attachment_image_url( $hero, 'bk-banner' );
-			$srcset = wp_get_attachment_image_srcset( $hero, 'bk-banner' );
-			if ( $src ) {
-				printf( '<link rel="preload" as="image" href="%s" imagesrcset="%s" imagesizes="100vw" fetchpriority="high">' . "\n", esc_url( $src ), esc_attr( (string) $srcset ) );
-			}
-		}
-		echo '<meta name="theme-color" content="#0F172A">' . "\n";
+		echo '<meta name="theme-color" content="#F2EFE8">' . "\n";
 	},
 	1
 );

@@ -11,12 +11,14 @@
     "dev:css": "tailwindcss -i ./assets/css/main.css -o ./assets/css/dist/main.css --watch",
     "dev:js": "esbuild assets/js/src/app.js --bundle --sourcemap --target=es2019 --outfile=assets/js/dist/app.js --watch",
     "lint:php": "node scripts/lint-php.mjs",
-    "zip": "cd .. && tar -a -c -f bayt-kahraba/dist/bayt-kahraba.zip --exclude=bayt-kahraba/node_modules --exclude=bayt-kahraba/dist --exclude=bayt-kahraba/playground --exclude=bayt-kahraba/.git --exclude=bayt-kahraba/package-lock.json bayt-kahraba",
+    "zip": "cd .. && tar -a -c -f bayt-kahraba/dist/bayt-kahraba.zip --exclude=bayt-kahraba/node_modules --exclude=bayt-kahraba/dist --exclude=bayt-kahraba/playground --exclude=bayt-kahraba/design --exclude=bayt-kahraba/.git --exclude=bayt-kahraba/package-lock.json bayt-kahraba",
     "pin": "node scripts/pin-blueprint.mjs"
   },
   "devDependencies": {
     "@alpinejs/collapse": "3.14.1",
     "@alpinejs/focus": "3.14.1",
+    "@fontsource/alexandria": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "5.0.20",
     "@tailwindcss/container-queries": "0.1.1",
     "alpinejs": "3.14.1",

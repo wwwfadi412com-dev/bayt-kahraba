@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div x-cloak x-show="menu" class="lg:hidden">
 	<div class="bk-overlay" x-show="menu" x-transition.opacity @click="menu = false"></div>
-	<aside class="fixed inset-y-0 start-0 z-[70] flex w-[88%] max-w-sm flex-col bg-white text-brand-ink shadow-lift"
+	<aside class="fixed inset-y-0 start-0 z-[70] flex w-[88%] max-w-sm flex-col bg-brand-paper text-brand-ink shadow-lift"
 		x-show="menu" x-transition:enter="transition duration-200 ease-out" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
 		x-transition:leave="transition duration-150 ease-in" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
 		x-trap.noscroll="menu" aria-label="<?php esc_attr_e( 'القائمة', 'baytkahraba' ); ?>">
@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) || exit;
 							<?php endif; ?>
 						</div>
 						<?php if ( $bk_parent['children'] ) : ?>
-							<ul x-show="o" x-collapse class="mb-2 space-y-0.5 rounded-xl bg-brand-stripe p-2 text-sm">
+							<ul x-show="o" x-collapse class="mb-2 space-y-0.5 rounded-xl bg-brand-card p-2 text-sm">
 								<?php foreach ( $bk_parent['children'] as $bk_child ) : ?>
 									<li>
 										<a href="<?php echo esc_url( $bk_child['url'] ); ?>" class="block rounded-lg px-3 py-2 font-medium hover:bg-white"><?php echo esc_html( $bk_child['name'] ); ?> <span class="text-brand-muted bk-num">(<?php echo (int) $bk_child['count']; ?>)</span></a>

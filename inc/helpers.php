@@ -38,8 +38,8 @@ function bk_settings_defaults(): array {
 		'top_bar_message'     => 'توصيل مجاني لباب البيت داخل دمشق وريفها القريب — وبنفس سعر المحل',
 		'compare_max'         => 4,
 		'products_per_page'   => 24,
-		'hero_title'          => 'كل أجهزة بيتك بسعر المحل… مع كفالة الوكيل الحقيقية',
-		'hero_subtitle'       => 'برادات، غسالات، شاشات، مكيفات إنفرتر وأدوات مطبخ من الحافظ، العربي، هنديكو، رامكو وغيرها — توصيل مجاني في دمشق وريفها وشحن رمزي لكل المحافظات.',
+		'hero_title'          => 'كهرباء أقل. بيت أكمل.',
+		'hero_subtitle'       => 'كل جهاز عندنا يأتيك ببطاقة واضحة: كم واط، كم أمبير، وهل يعمل على الطاقة الشمسية. اختر بثقة، بسعر المحل نفسه، مع كفالة الوكيل الحقيقية.',
 		'hero_image_id'       => 0,
 	);
 }
@@ -219,13 +219,13 @@ function bk_power_classes(): array {
 	return array(
 		'solar_ready'   => array(
 			'label' => __( 'يعمل على الانفرتر المنزلي والطاقة الشمسية', 'baytkahraba' ),
-			'short' => __( 'يعمل على الطاقة الشمسية', 'baytkahraba' ),
+			'short' => __( 'طاقة شمسية', 'baytkahraba' ),
 			'badge' => 'bk-badge-emerald',
 			'icon'  => 'sun',
 		),
 		'low_amp'       => array(
 			'label' => __( 'اقتصادي جداً - يعمل على أمبير منخفض', 'baytkahraba' ),
-			'short' => __( 'اقتصادي - أمبير منخفض', 'baytkahraba' ),
+			'short' => __( 'أمبير منخفض', 'baytkahraba' ),
 			'badge' => 'bk-badge-emerald-soft',
 			'icon'  => 'bolt',
 		),
@@ -268,6 +268,33 @@ function bk_get_product_power( int $product_id ): array {
 	);
 }
 
+/**
+ * Energy scale by ampere draw (EU-label style colors, A+++ → E).
+ *
+ * @return array{index: int, color: string, label: string, colors: string[]}
+ */
+function bk_energy_class( float $ampere ): array {
+	$colors = array( '#0B8F4D', '#4DB648', '#B5D334', '#F6E31B', '#F7A81B', '#EE6A23', '#E2231A' );
+	$labels = array(
+		__( 'ممتاز جداً', 'baytkahraba' ),
+		__( 'ممتاز', 'baytkahraba' ),
+		__( 'اقتصادي', 'baytkahraba' ),
+		__( 'متوسط', 'baytkahraba' ),
+		__( 'مرتفع', 'baytkahraba' ),
+		__( 'عالٍ', 'baytkahraba' ),
+		__( 'عالٍ جداً', 'baytkahraba' ),
+	);
+	$limits = array( .5, 1, 2, 4, 6, 9 );
+	$index  = 6;
+	foreach ( $limits as $i => $limit ) {
+		if ( $ampere <= $limit ) {
+			$index = $i;
+			break;
+		}
+	}
+	return array( 'index' => $index, 'color' => $colors[ $index ], 'label' => $labels[ $index ], 'colors' => $colors );
+}
+
 function bk_format_watt( float $watt ): string {
 	return $watt ? number_format_i18n( $watt ) . ' ' . __( 'واط', 'baytkahraba' ) : '';
 }
@@ -304,7 +331,8 @@ function bk_term_image_id( int $term_id, string $meta_key = 'thumbnail_id' ): in
  * Neutral appliance placeholder (inline SVG data URI — no request).
  */
 function bk_placeholder_src(): string {
-	$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#F1F5F9"/><g fill="none" stroke="#CBD5E1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><rect x="130" y="90" width="140" height="220" rx="16"/><path d="M130 170h140M160 120v25M160 200v40"/></g><path d="M212 228l-18 28h14l-6 22 20-30h-14l4-20z" fill="#F59E0B"/></svg>';
+	// Transparent "technical drawing": ink line art + volt bolt, sits on the grid-paper plates.
+	$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><g fill="none" stroke="#121212" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="135" y="80" width="130" height="240" rx="18"/><path d="M135 165h130M165 112v26M165 192v44"/></g><path d="M216 222l-20 30h15l-6 24 22-33h-15l4-21z" fill="#FF5B1F"/></svg>';
 	return 'data:image/svg+xml;base64,' . base64_encode( $svg ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 }
 
@@ -340,6 +368,15 @@ function bk_icon( string $name, string $class = 'size-5' ): string {
 		'wrench'    => '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6Z"/>',
 		'minus'     => '<path d="M5 12h14"/>',
 		'plus'      => '<path d="M12 5v14M5 12h14"/>',
+		'fridge'    => '<rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M6 10h12M9 5.5v2M9 13v3"/>',
+		'tv'        => '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/>',
+		'washer'    => '<rect x="4" y="2.5" width="16" height="19" rx="2"/><circle cx="12" cy="13" r="4.5"/><path d="M7.5 6h.01M10.5 6h4"/>',
+		'ac'        => '<rect x="2.5" y="5" width="19" height="8" rx="2"/><path d="M6 10h12M7 16c0 1.5-1 2.5-1 4M12 16v4M17 16c0 1.5 1 2.5 1 4"/>',
+		'fan'       => '<circle cx="12" cy="10" r="1.6"/><path d="M12 8.4c0-3 .5-5.4 2.6-5.4 2 0 2.4 2.6.4 4.4l-1.6 1.4M13.4 11c2.6 1.5 4.4 3.2 3.4 5-1 1.8-3.4.8-4-1.8l-.4-2M10.6 10.9c-2.6 1.5-5 2.1-6 .3-1-1.8 1-3.4 3.6-2.6l2 .7M12 12v9M8 21h8"/>',
+		'pot'       => '<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-6ZM2 10h20M9 6c0-1 1-1 1-2M14 6c0-1 1-1 1-2"/>',
+		'vacuum'    => '<circle cx="8" cy="17" r="4"/><path d="M8 13V5a3 3 0 0 1 6 0v3M14 8l5 9M17 21h4"/>',
+		'solar'     => '<path d="M4 15h16l-2-9H6l-2 9ZM5 10.5h14M10 6l-1 9M14 6l1 9M12 15v5M8 20h8"/>',
+		'arrow-ul'  => '<path d="M17 17 7 7M7 15V7h8"/>',
 		'whatsapp'  => '',
 	);
 
