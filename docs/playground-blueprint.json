@@ -1,0 +1,19 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "preferredVersions": { "php": "8.2", "wp": "latest" },
+  "features": { "networking": true },
+  "login": true,
+  "steps": [
+    { "step": "setSiteOptions", "options": { "permalink_structure": "/%postname%/", "blogname": "بيت الكهرباء" } },
+    {
+      "step": "installPlugin",
+      "pluginData": { "resource": "wordpress.org/plugins", "slug": "woocommerce" },
+      "options": { "activate": true }
+    },
+    { "step": "activateTheme", "themeFolderName": "bayt-kahraba" },
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; if ( class_exists('WC_Install') ) { WC_Install::create_pages(); } $r = bk_seed_run(); update_option('bk_seed_test', $r); flush_rewrite_rules(false); echo 'SEEDED ' . wp_json_encode($r);"
+    }
+  ]
+}

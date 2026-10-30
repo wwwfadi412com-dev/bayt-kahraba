@@ -1,0 +1,267 @@
+/* ==========================================================================
+   Bayt Al-Kahraba — Design System (RTL-first)
+   Source file. Compiled by `npm run build:css` into assets/css/dist/main.css
+   ========================================================================== */
+
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-arabic-400.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-arabic-500.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-arabic-600.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-arabic-700.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('../../fonts/ibm-plex-sans-arabic-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------------------------------------------------
+   Semantic tokens (also consumed by admin.css and inline SVG)
+   -------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    --bk-navy: #0F172A;
+    --bk-royal: #1E3A8A;
+    --bk-amber: #F59E0B;
+    --bk-amber-hover: #D97706;
+    --bk-emerald: #10B981;
+    --bk-emerald-hover: #059669;
+    --bk-canvas: #F8FAFC;
+    --bk-surface: #FFFFFF;
+    --bk-line: #E2E8F0;
+    --bk-stripe: #F1F5F9;
+    --bk-ink: #0F172A;
+    --bk-body: #334155;
+    --bk-muted: #64748B;
+    --bk-radius: .875rem;
+    --bk-header-h: 4.5rem;
+    color-scheme: light;
+  }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    @apply bg-brand-canvas text-brand-body font-sans antialiased;
+    font-feature-settings: "kern";
+    line-height: 1.75;
+  }
+  h1, h2, h3, h4, h5 { @apply text-brand-ink font-bold; line-height: 1.4; }
+  a { @apply transition-colors; }
+  img, video { @apply max-w-full h-auto; }
+  [x-cloak] { display: none !important; }
+  :focus-visible { outline: 2px solid var(--bk-amber); outline-offset: 2px; }
+  ::selection { background: var(--bk-amber); color: var(--bk-navy); }
+
+  /* Prices, model codes, watt/amp figures: tabular numerals so SYP columns align */
+  .bk-num, .price, .amount, .woocommerce-Price-amount, bdi, .bk-spec-value, .bk-sku {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  .bk-ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+  .screen-reader-text {
+    @apply sr-only;
+  }
+  .screen-reader-text:focus { @apply not-sr-only fixed top-2 start-2 z-[100] bg-white px-4 py-2 rounded shadow-lift; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Components
+   -------------------------------------------------------------------------- */
+@layer components {
+  .bk-container { @apply container; }
+
+  /* Buttons */
+  .bk-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+           transition-all duration-150 select-none disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .bk-btn-lg { @apply px-6 py-3.5 text-base; }
+  .bk-btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
+  .bk-btn-amber { @apply bk-btn bg-brand-amber text-brand-navy hover:bg-brand-amber-hover hover:text-white shadow-sm active:scale-[.98]; }
+  .bk-btn-emerald { @apply bk-btn bg-brand-emerald text-white hover:bg-brand-emerald-hover shadow-sm active:scale-[.98]; }
+  .bk-btn-navy { @apply bk-btn bg-brand-navy text-white hover:bg-brand-royal; }
+  .bk-btn-ghost { @apply bk-btn bg-white text-brand-ink border border-brand-line hover:border-brand-royal hover:text-brand-royal; }
+  .bk-icon-btn { @apply inline-grid place-items-center size-10 rounded-full text-brand-ink hover:bg-brand-stripe transition-colors; }
+
+  /* Surfaces */
+  .bk-card {
+    @apply bg-white border border-brand-line rounded-xl2 shadow-card transition-all duration-200;
+  }
+  .bk-card-hover { @apply hover:shadow-lift hover:-translate-y-0.5 hover:border-slate-300; }
+  .bk-section { @apply py-10 lg:py-14; }
+  .bk-section-title { @apply text-xl lg:text-2xl font-bold text-brand-ink; }
+  .bk-eyebrow { @apply text-xs font-semibold tracking-wide text-brand-royal uppercase; }
+
+  /* Badges */
+  .bk-badge { @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold leading-none whitespace-nowrap; }
+  .bk-badge-emerald { @apply bk-badge bg-brand-emerald text-white; }
+  .bk-badge-emerald-soft { @apply bk-badge bg-brand-emerald-50 text-brand-emerald-hover border border-brand-emerald-100; }
+  .bk-badge-royal { @apply bk-badge bg-brand-royal text-white; }
+  .bk-badge-amber { @apply bk-badge bg-brand-amber text-brand-navy; }
+  .bk-badge-slate { @apply bk-badge bg-slate-100 text-slate-600 border border-slate-200; }
+  .bk-badge-sale { @apply bk-badge bg-red-600 text-white; }
+
+  /* Prices */
+  .bk-price { @apply font-bold text-brand-ink bk-num; }
+  .bk-price del { @apply text-brand-muted font-normal text-sm me-2; }
+  .bk-price ins { @apply no-underline; }
+
+  /* Forms */
+  .bk-input, .bk-select, .bk-textarea {
+    @apply w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink
+           placeholder:text-slate-400 focus:border-brand-royal focus:ring-2 focus:ring-brand-royal/20 outline-none transition;
+  }
+  .bk-label { @apply block mb-1.5 text-sm font-semibold text-brand-ink; }
+
+  /* Spec table */
+  .bk-spec-table { @apply w-full text-sm border border-brand-line rounded-xl overflow-hidden; border-collapse: separate; border-spacing: 0; }
+  .bk-spec-table th { @apply w-2/5 bg-brand-stripe/60 px-4 py-3 text-start font-semibold text-brand-ink align-top; }
+  .bk-spec-table td { @apply px-4 py-3 text-brand-body; }
+  .bk-spec-table tr:nth-child(even) th, .bk-spec-table tr:nth-child(even) td { background: var(--bk-stripe); }
+  .bk-spec-table tr + tr th, .bk-spec-table tr + tr td { border-top: 1px solid var(--bk-line); }
+
+  /* Long-form SEO content */
+  .bk-prose { @apply text-brand-body leading-8 text-[15px]; }
+  .bk-prose h2 { @apply text-xl lg:text-2xl mt-8 mb-3; }
+  .bk-prose h3 { @apply text-lg mt-6 mb-2 text-brand-royal; }
+  .bk-prose p { @apply mb-4; }
+  .bk-prose ul { @apply list-disc ps-6 mb-4 space-y-1; }
+  .bk-prose ol { @apply list-decimal ps-6 mb-4 space-y-1; }
+  .bk-prose a { @apply text-brand-royal underline decoration-brand-amber/60 underline-offset-4 hover:text-brand-amber-hover; }
+  .bk-prose strong { @apply text-brand-ink; }
+  .bk-prose table { @apply bk-spec-table my-4; }
+
+  /* Accordion */
+  .bk-acc-item { @apply border-b border-brand-line last:border-0; }
+  .bk-acc-btn { @apply flex w-full items-center justify-between gap-4 py-4 text-start font-semibold text-brand-ink hover:text-brand-royal; }
+
+  /* Skeleton */
+  .bk-skeleton { @apply animate-pulse bg-slate-200/70 rounded-lg; }
+
+  /* Story bubble (shop video) */
+  .bk-story-ring { background: conic-gradient(from 180deg, var(--bk-amber), var(--bk-emerald), var(--bk-royal), var(--bk-amber)); }
+
+  /* Scroll rails */
+  .bk-rail { @apply flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2; scrollbar-width: thin; }
+  .bk-rail > * { @apply snap-start shrink-0; }
+
+  /* Drawers / modals */
+  .bk-overlay { @apply fixed inset-0 z-[60] bg-brand-navy/60 backdrop-blur-[2px]; }
+  .bk-drawer { @apply fixed inset-y-0 end-0 z-[70] w-full max-w-md bg-white shadow-lift flex flex-col; }
+  .bk-modal { @apply fixed inset-0 z-[70] grid place-items-center p-4; }
+}
+
+/* --------------------------------------------------------------------------
+   WooCommerce classic markup (cart / checkout / account) — styled without
+   loading WooCommerce's own stylesheets.
+   -------------------------------------------------------------------------- */
+@layer components {
+  .woocommerce-notices-wrapper:empty { display: none; }
+  .woocommerce-message, .woocommerce-info, .woocommerce-error, .woocommerce-notice {
+    @apply list-none my-4 rounded-xl border px-4 py-3 text-sm flex flex-wrap items-center gap-3;
+  }
+  .woocommerce-message { @apply bg-brand-emerald-50 border-brand-emerald-100 text-brand-emerald-hover; }
+  .woocommerce-info { @apply bg-brand-royal-50 border-blue-100 text-brand-royal; }
+  .woocommerce-error { @apply bg-red-50 border-red-100 text-red-700; }
+  .woocommerce-message .button, .woocommerce-info .button { @apply bk-btn-sm bk-btn-navy ms-auto; }
+
+  .woocommerce form .form-row { @apply mb-4; }
+  .woocommerce form .form-row label { @apply bk-label; }
+  .woocommerce form .form-row .required { @apply text-red-600 no-underline; }
+  .woocommerce form .form-row .optional { @apply text-brand-muted font-normal text-xs; }
+  .woocommerce form .form-row input.input-text,
+  .woocommerce form .form-row textarea,
+  .woocommerce form .form-row select,
+  .woocommerce-cart table.cart td.actions .coupon .input-text { @apply bk-input; }
+  .woocommerce form .form-row.woocommerce-invalid input.input-text,
+  .woocommerce form .form-row.woocommerce-invalid select { @apply border-red-400; }
+  .woocommerce form .form-row-first, .woocommerce form .form-row-last { @apply w-full; }
+
+  .woocommerce button.button, .woocommerce a.button, .woocommerce input.button { @apply bk-btn-ghost; }
+  .woocommerce button.button.alt, .woocommerce #place_order, .woocommerce a.checkout-button { @apply bk-btn-amber bk-btn-lg w-full; }
+
+  .woocommerce table.shop_table { @apply w-full text-sm bg-white border border-brand-line rounded-xl overflow-hidden; border-collapse: separate; border-spacing: 0; }
+  .woocommerce table.shop_table th, .woocommerce table.shop_table td { @apply px-4 py-3 text-start border-b border-brand-line; }
+  .woocommerce table.shop_table tfoot th { @apply font-semibold text-brand-ink; }
+  .woocommerce table.shop_table .order-total .amount { @apply text-lg font-bold text-brand-ink; }
+  .woocommerce table.shop_table img { @apply w-16 rounded-lg; }
+
+  .woocommerce-checkout #payment { @apply bk-card p-4 mt-4; }
+  .woocommerce-checkout #payment ul.payment_methods { @apply list-none space-y-2 mb-4; }
+  .woocommerce-checkout #payment ul.payment_methods li { @apply rounded-xl border border-brand-line p-3; }
+  .woocommerce-checkout #payment div.payment_box { @apply mt-2 rounded-lg bg-brand-stripe p-3 text-sm; }
+  .woocommerce-checkout #shipping_method { @apply list-none space-y-1; }
+  .woocommerce-checkout .woocommerce-shipping-totals td { @apply text-sm; }
+  .woocommerce-account .woocommerce-MyAccount-navigation ul { @apply list-none space-y-1; }
+  .woocommerce-account .woocommerce-MyAccount-navigation a { @apply block rounded-lg px-3 py-2 hover:bg-brand-stripe; }
+  .woocommerce-account .woocommerce-MyAccount-navigation .is-active a { @apply bg-brand-navy text-white; }
+  .woocommerce .quantity .qty { @apply bk-input w-20 text-center; }
+  .woocommerce .blockUI.blockOverlay { @apply !bg-white/70; }
+  .select2-container--default .select2-selection--single { @apply !h-11 !rounded-xl !border-brand-line; }
+  .select2-container--default .select2-selection--single .select2-selection__rendered { @apply !leading-[2.6rem] !px-4; }
+
+  .star-rating { @apply relative inline-block text-brand-amber; }
+  .comment-form-rating select { @apply bk-select w-auto; }
+  #reviews .commentlist { @apply list-none space-y-4; }
+  #reviews .comment_container { @apply bk-card p-4; }
+  #reviews .avatar { @apply hidden; }
+  #reviews textarea, #reviews input[type="text"], #reviews input[type="email"] { @apply bk-input; }
+  #reviews .comment-form p { @apply mb-3; }
+  #reviews .comment-form label { @apply bk-label; }
+  #reviews .form-submit .submit { @apply bk-btn-navy; }
+
+  /* Logged-in staff: keep sticky header, drawers and modals below the WP admin bar. */
+  .admin-bar header.sticky { top: var(--wp-admin--admin-bar--height, 32px); }
+  .admin-bar .bk-drawer, .admin-bar aside.fixed.inset-y-0 { top: var(--wp-admin--admin-bar--height, 32px); }
+}
+
+@layer utilities {
+  .bk-safe-bottom { padding-bottom: max(.75rem, env(safe-area-inset-bottom)); }
+  .bk-scrollbar-none { scrollbar-width: none; }
+  .bk-scrollbar-none::-webkit-scrollbar { display: none; }
+  .bk-text-balance { text-wrap: balance; }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "بيت الكهرباء — متجر تجريبي",
+    "description": "WooCommerce + Bayt Al-Kahraba theme with demo brands, categories and 26 products.",
+    "author": "wwwfadi412com-dev",
+    "categories": ["Woocommerce", "Theme"]
+  },
+  "landingPage": "/",
+  "preferredVersions": { "php": "8.2", "wp": "latest" },
+  "features": { "networking": true },
+  "steps": [
+    { "step": "setSiteOptions", "options": { "permalink_structure": "/%postname%/", "blogname": "بيت الكهرباء" } },
+    {
+      "step": "installPlugin",
+      "pluginData": { "resource": "wordpress.org/plugins", "slug": "woocommerce" },
+      "options": { "activate": true }
+    },
+    {
+      "step": "installTheme",
+      "themeData": { "resource": "url", "url": "https://raw.githubusercontent.com/wwwfadi412com-dev/bayt-kahraba/main/dist/bayt-kahraba.zip" },
+      "options": { "activate": true }
+    },
+    {
+      "step": "writeFile",
+      "path": "/wordpress/wp-content/mu-plugins/playground-demo.php",
+      "data": "<?php\n// Playground demo only: its SQLite database cannot run WooCommerce's MySQL stock-reservation query.\nadd_filter( 'woocommerce_hold_stock_for_checkout', '__return_false' );\n"
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; bk_seed_run(); flush_rewrite_rules( false );"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+# Built assets ARE committed (the theme must run on hosts without Node).
