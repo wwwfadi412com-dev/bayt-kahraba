@@ -17,7 +17,7 @@
 https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/wwwfadi412com-dev/bayt-kahraba/main/playground/blueprint.json
 
 كل زائر يحصل على نسخة كاملة من المتجر مع البيانات التجريبية خلال دقيقة تقريباً (ووكومرس + القالب + 26 منتجاً)، وتعديلاته لا تُحفظ — للعرض فقط. لوحة التحكم: `/wp-admin` باسم `admin` وكلمة مرور `password`.
-بعد أي تعديل على القالب: `npm run build && npm run zip` ثم ارفع `dist/bayt-kahraba.zip` إلى GitHub، وارفع رقم `?v=` لرابط الملف في `playground/blueprint.json` (مثلاً `?v=1.0.2`) حتى لا تعرض المتصفحات النسخة المخزنة القديمة.
+بعد أي تعديل على القالب: `npm run build && npm run zip` ثم اعمل commit لملف `dist/bayt-kahraba.zip`، ثم `npm run pin` (يثبّت رابط الملف في الـ blueprint على هذا الـ commit) ثم commit و push. التثبيت على الـ commit ضروري لأن GitHub يخزّن الروابط العادية مؤقتاً ويتجاهل `?v=`.
 
 ## ما الذي يُدار من لوحة التحكم
 | الشاشة | الاستخدام |
