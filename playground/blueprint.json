@@ -18,7 +18,7 @@
     },
     {
       "step": "installTheme",
-      "themeData": { "resource": "url", "url": "https://raw.githubusercontent.com/wwwfadi412com-dev/bayt-kahraba/3a3322904a3e5e0fae03371f5b73288d3b14c868/dist/bayt-kahraba.zip" },
+      "themeData": { "resource": "url", "url": "https://raw.githubusercontent.com/wwwfadi412com-dev/bayt-kahraba/cff57550736ae57b3f58c808fe37080a9b644d6d/dist/bayt-kahraba.zip" },
       "options": { "activate": true }
     },
     {
