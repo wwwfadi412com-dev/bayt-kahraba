@@ -70,7 +70,7 @@ add_action(
 	'wp_enqueue_scripts',
 	static function (): void {
 		// Block-editor front-end CSS (we don't render blocks in shop templates).
-		foreach ( array( 'wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'wc-blocks-style', 'wc-blocks-vendors-style', 'wc-all-blocks-style' ) as $handle ) {
+		foreach ( array( 'wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'wc-blocks-style', 'wc-blocks-vendors-style', 'wc-all-blocks-style', 'brands-styles' ) as $handle ) {
 			wp_dequeue_style( $handle );
 			wp_deregister_style( $handle );
 		}

@@ -1,63 +1,52 @@
 <?php
 /**
- * Mobile off-canvas menu (accordion tree + brands). Rendered inside the
- * header's Alpine scope (`menu`).
+ * Mobile menu — native <dialog> side sheet with native <details> groups.
  *
  * @package BaytKahraba
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$bk_shop = wc_get_page_permalink( 'shop' );
 ?>
-<div x-cloak x-show="menu" class="lg:hidden">
-	<div class="bk-overlay" x-show="menu" x-transition.opacity @click="menu = false"></div>
-	<aside class="fixed inset-y-0 start-0 z-[70] flex w-[88%] max-w-sm flex-col bg-brand-paper text-brand-ink shadow-lift"
-		x-show="menu" x-transition:enter="transition duration-200 ease-out" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-		x-transition:leave="transition duration-150 ease-in" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
-		x-trap.noscroll="menu" aria-label="<?php esc_attr_e( 'القائمة', 'baytkahraba' ); ?>">
-		<div class="flex items-center justify-between border-b border-brand-line p-4">
-			<?php bk_part( 'template-parts/header/logo', array( 'show_tagline' => false ) ); ?>
-			<button type="button" class="bk-icon-btn" @click="menu = false" aria-label="<?php esc_attr_e( 'إغلاق', 'baytkahraba' ); ?>"><?php bk_the_icon( 'close' ); ?></button>
+<dialog id="bk-menu" class="sheet" aria-label="<?php esc_attr_e( 'القائمة', 'baytkahraba' ); ?>">
+	<div class="sheet-panel">
+		<div class="mb-4 flex items-center justify-between">
+			<?php bk_part( 'template-parts/header/logo' ); ?>
+			<button type="button" class="icon-btn -me-2" data-close aria-label="<?php esc_attr_e( 'إغلاق', 'baytkahraba' ); ?>"><?php bk_the_icon( 'close' ); ?></button>
 		</div>
-		<nav class="flex-1 overflow-y-auto p-2" aria-label="<?php esc_attr_e( 'الأقسام', 'baytkahraba' ); ?>">
-			<ul>
-				<?php foreach ( bk_get_category_tree() as $bk_parent ) : ?>
-					<li x-data="{ o: false }" class="border-b border-brand-line last:border-0">
-						<div class="flex items-center">
-							<a href="<?php echo esc_url( $bk_parent['url'] ); ?>" class="flex-1 px-3 py-3.5 font-semibold"><?php echo esc_html( $bk_parent['name'] ); ?></a>
-							<?php if ( $bk_parent['children'] ) : ?>
-								<button type="button" class="bk-icon-btn" @click="o = !o" :aria-expanded="o" aria-label="<?php esc_attr_e( 'فتح الأقسام الفرعية', 'baytkahraba' ); ?>">
-									<span class="transition" :class="o && 'rotate-180'"><?php bk_the_icon( 'chevron-d', 'size-5' ); ?></span>
-								</button>
-							<?php endif; ?>
-						</div>
-						<?php if ( $bk_parent['children'] ) : ?>
-							<ul x-show="o" x-collapse class="mb-2 space-y-0.5 rounded-xl bg-brand-card p-2 text-sm">
-								<?php foreach ( $bk_parent['children'] as $bk_child ) : ?>
-									<li>
-										<a href="<?php echo esc_url( $bk_child['url'] ); ?>" class="block rounded-lg px-3 py-2 font-medium hover:bg-white"><?php echo esc_html( $bk_child['name'] ); ?> <span class="text-brand-muted bk-num">(<?php echo (int) $bk_child['count']; ?>)</span></a>
-										<?php foreach ( $bk_child['children'] as $bk_grand ) : ?>
-											<a href="<?php echo esc_url( $bk_grand['url'] ); ?>" class="block rounded-lg py-1.5 pe-3 ps-7 text-brand-body hover:bg-white"><?php echo esc_html( $bk_grand['name'] ); ?></a>
-										<?php endforeach; ?>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
+
+		<nav class="faq flex-1" aria-label="<?php esc_attr_e( 'الأقسام', 'baytkahraba' ); ?>">
+			<?php foreach ( bk_get_category_tree() as $bk_node ) : ?>
+				<?php if ( $bk_node['children'] ) : ?>
+					<details>
+						<summary class="!py-4 !text-[16px]"><?php echo esc_html( $bk_node['name'] ); ?><span class="plus"><?php bk_the_icon( 'plus', 'size-4' ); ?></span></summary>
+						<ul class="space-y-1 pb-4">
+							<li><a class="block rounded-xl px-3 py-2 font-medium text-ink hover:bg-stage" href="<?php echo esc_url( $bk_node['url'] ); ?>"><?php esc_html_e( 'كل القسم', 'baytkahraba' ); ?></a></li>
+							<?php foreach ( $bk_node['children'] as $bk_child ) : ?>
+								<li><a class="block rounded-xl px-3 py-2 text-muted hover:bg-stage hover:text-ink" href="<?php echo esc_url( $bk_child['url'] ); ?>"><?php echo esc_html( $bk_child['name'] ); ?></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</details>
+				<?php else : ?>
+					<a class="block border-b border-line py-4 font-semibold text-ink" href="<?php echo esc_url( $bk_node['url'] ); ?>"><?php echo esc_html( $bk_node['name'] ); ?></a>
+				<?php endif; ?>
+			<?php endforeach; ?>
+
 			<?php $bk_brands = bk_get_brands(); ?>
 			<?php if ( $bk_brands ) : ?>
-				<p class="bk-eyebrow mt-6 px-3"><?php esc_html_e( 'الماركات والوكلاء', 'baytkahraba' ); ?></p>
-				<div class="mt-2 grid grid-cols-3 gap-2 px-2">
+				<p class="mb-2 mt-6 text-[13px] font-medium text-muted"><?php esc_html_e( 'الماركات', 'baytkahraba' ); ?></p>
+				<div class="flex flex-wrap gap-2">
 					<?php foreach ( $bk_brands as $bk_brand ) : ?>
-						<a href="<?php echo esc_url( get_term_link( $bk_brand ) ); ?>" class="grid h-12 place-items-center rounded-xl border border-brand-line p-1.5"><?php echo bk_brand_logo( $bk_brand, 'max-h-8 w-auto object-contain text-xs', 'thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a>
+						<a class="chip" href="<?php echo esc_url( get_term_link( $bk_brand ) ); ?>"><?php echo esc_html( $bk_brand->name ); ?></a>
 					<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
 		</nav>
-		<div class="grid grid-cols-2 gap-2 border-t border-brand-line p-3 bk-safe-bottom">
-			<a href="tel:<?php echo esc_attr( (string) bk_option( 'phone' ) ); ?>" class="bk-btn-ghost"><?php bk_the_icon( 'phone', 'size-4' ); ?><?php esc_html_e( 'اتصل بنا', 'baytkahraba' ); ?></a>
-			<a href="<?php echo esc_url( bk_whatsapp_url() ); ?>" class="bk-btn-emerald" target="_blank" rel="noopener"><?php bk_the_icon( 'whatsapp', 'size-4' ); ?><?php esc_html_e( 'واتساب', 'baytkahraba' ); ?></a>
+
+		<div class="mt-6 grid gap-2">
+			<a class="badge-sun h-11 justify-center text-[14px]" href="<?php echo esc_url( add_query_arg( 'power', 'solar', $bk_shop ) ); ?>"><?php bk_the_icon( 'sun' ); ?><?php esc_html_e( 'أجهزة الطاقة الشمسية والأمبير', 'baytkahraba' ); ?></a>
+			<a class="btn-wa w-full" href="<?php echo bk_esc_wa( bk_general_whatsapp_url() ); ?>" target="_blank" rel="noopener"><?php bk_the_icon( 'whatsapp' ); ?><?php esc_html_e( 'راسلنا على واتساب', 'baytkahraba' ); ?></a>
 		</div>
-	</aside>
-</div>
+	</div>
+</dialog>

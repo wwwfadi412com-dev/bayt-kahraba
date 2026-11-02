@@ -1,7 +1,7 @@
 <?php
 /**
- * Front-end assets: one purged Tailwind stylesheet, one deferred Alpine.js
- * bundle, preloaded Arabic fonts and the runtime config object.
+ * Front-end assets: one purged Tailwind stylesheet, one tiny deferred script
+ * (no framework), preloaded Arabic fonts and the runtime config object.
  *
  * @package BaytKahraba
  */
@@ -25,55 +25,31 @@ add_action(
 );
 
 /**
- * Runtime config consumed by Alpine components.
+ * Runtime config consumed by app.js.
  */
 function bk_frontend_config(): array {
-	if ( ! function_exists( 'WC' ) ) {
-		return array( 'rest' => esc_url_raw( rest_url( BK_REST_NS . '/' ) ), 'i18n' => array() );
-	}
-	$decimals = wc_get_price_decimals();
 	return array(
-		'rest'          => esc_url_raw( rest_url( BK_REST_NS . '/' ) ),
-		'storeApi'      => esc_url_raw( rest_url( 'wc/store/v1/' ) ),
-		'nonce'         => wp_create_nonce( 'wp_rest' ),
-		'storeNonce'    => wp_create_nonce( 'wc_store_api' ),
-		'cartUrl'       => wc_get_cart_url(),
-		'checkoutUrl'   => wc_get_checkout_url(),
-		'whatsapp'      => bk_phone_international( (string) bk_option( 'whatsapp' ) ),
-		'storeName'     => (string) bk_option( 'store_name' ),
-		'compareMax'    => (int) bk_option( 'compare_max', 4 ),
-		'placeholder'   => bk_placeholder_src(),
-		'currency'      => array(
-			'symbol'   => html_entity_decode( get_woocommerce_currency_symbol() ),
-			'decimals' => $decimals,
-			'code'     => get_woocommerce_currency(),
-		),
-		'shipping'      => function_exists( 'bk_shipping_public_config' ) ? bk_shipping_public_config() : array(),
-		'i18n'          => array(
-			'added'        => __( 'تمت الإضافة إلى السلة', 'baytkahraba' ),
-			'error'        => __( 'حدث خطأ، حاول مرة أخرى أو اطلب عبر واتساب', 'baytkahraba' ),
-			'compareFull'  => __( 'يمكنك مقارنة 4 منتجات كحد أقصى', 'baytkahraba' ),
-			'free'         => __( 'مجاني', 'baytkahraba' ),
-			'noResults'    => __( 'لا توجد نتائج مطابقة — جرّب كلمة أخرى مثل "براد" أو "شاشة"', 'baytkahraba' ),
-			'loading'      => __( 'جارِ التحميل…', 'baytkahraba' ),
+		'rest' => esc_url_raw( rest_url( BK_REST_NS . '/' ) ),
+		'i18n' => array(
+			'noResults' => __( 'ما لقينا نتائج — جرّب كلمة تانية مثل "براد" أو "شاشة"', 'baytkahraba' ),
+			'all'       => __( 'كل النتائج', 'baytkahraba' ),
 		),
 	);
 }
 
 /**
- * Preload the two critical Arabic font weights + the LCP hero image.
+ * Preload the two critical Arabic font files (body + headline).
  */
 add_action(
 	'wp_head',
 	static function (): void {
-		// Body text + the display weight used by the hero headline (the LCP element).
-		foreach ( array( 'ibm-plex-sans-arabic-arabic-400', 'alexandria-arabic-900', 'alexandria-arabic-800' ) as $font ) {
+		foreach ( array( 'ibm-plex-sans-arabic-arabic-400', 'alexandria-arabic-600' ) as $font ) {
 			printf(
 				'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
 				esc_url( BK_URI . "/assets/fonts/{$font}.woff2" )
 			);
 		}
-		echo '<meta name="theme-color" content="#F2EFE8">' . "\n";
+		echo '<meta name="theme-color" content="#FAF9F6">' . "\n";
 	},
 	1
 );

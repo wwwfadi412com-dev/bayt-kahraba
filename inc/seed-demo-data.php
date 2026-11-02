@@ -330,38 +330,30 @@ function bk_seed_products_run( array $ids ): int {
 function bk_seed_pages(): void {
 	// Short Latin slugs: WordPress truncates long percent-encoded Arabic slugs at 200 bytes.
 	$pages = array(
-		'bundle'   => array( 'حاسبة تجهيز العرسان والبيت الكامل', '<!-- wp:paragraph --><p>جهّز بيتك بالكامل بخطوات بسيطة: اختر البراد والغسالة والشاشة والطباخ والأدوات الصغيرة ضمن باقة اقتصادية أو ذكية أو فاخرة، واحصل على خصم إضافي عند طلب الباقة كاملة مع توصيل مجاني داخل دمشق وريفها.</p><!-- /wp:paragraph -->', 'page-bundle-builder.php' ),
-		'warranty' => array( 'التحقق من الكفالة والفاتورة الإلكترونية', '<!-- wp:paragraph --><p>اقرأ شروط كفالة كل وكيل، وسجّل رقم طلبك وموبايلك لحفظ تاريخ بدء كفالتك إلكترونياً.</p><!-- /wp:paragraph --><!-- wp:shortcode -->[bk_warranty]<!-- /wp:shortcode -->', '' ),
-		'shipping' => array( 'سياسة التوصيل والشحن', '<!-- wp:heading --><h2>توصيل مجاني داخل دمشق وريفها القريب</h2><!-- /wp:heading --><!-- wp:paragraph --><p>نوصل مجاناً لباب البيت في المزة، الميدان، مشروع دمر، كفرسوسة، جرمانا، صحنايا، قدسيا وضاحية قدسيا وغيرها، مع فحص الجهاز عند الاستلام.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>ريف دمشق الأبعد</h2><!-- /wp:heading --><!-- wp:paragraph --><p>التل، قطنا، الكسوة، دوما، حرستا، الزبداني، يبرود، النبك وغيرها: رسم توصيل رمزي يظهر تلقائياً عند اختيار المنطقة.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>باقي المحافظات السورية</h2><!-- /wp:heading --><!-- wp:paragraph --><p>نشحن إلى حلب، حمص، حماة، اللاذقية، طرطوس، درعا، السويداء وباقي المحافظات عبر شركات شحن موثوقة بتغليف آمن، والتكلفة حسب حجم الجهاز.</p><!-- /wp:paragraph -->', '' ),
+		'how-to-order'    => array( 'كيف بتطلب من بيت الكهرباء؟', '<!-- wp:paragraph --><p>ما في دفع أونلاين ولا حسابات. كل الطلبات بتتم برسالة واتساب، ومنأكدلك التوفر والتوصيل قبل ما تدفع أي ليرة.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>1. اختار جهازك</h2><!-- /wp:heading --><!-- wp:paragraph --><p>تصفح الأقسام وقارن السعر والسحب بالأمبير والكفالة. كل الأسعار نفس سعر المحل وبتتحدّث يومياً.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>2. اضغط «اطلب على واتساب»</h2><!-- /wp:heading --><!-- wp:paragraph --><p>بتنفتح رسالة جاهزة فيها اسم الجهاز والموديل والسعر ورابط المنتج. اكتب اسمك ومنطقتك وابعتها.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>3. منأكد ومنوصّل</h2><!-- /wp:heading --><!-- wp:paragraph --><p>منرد عليك بأسرع وقت لنأكد التوفر وموعد التوصيل. بتفحص الجهاز قدامك وبتدفع عند الاستلام داخل دمشق وريفها، أو بحوالة معتمدة للمحافظات.</p><!-- /wp:paragraph -->' ),
+		'shipping-policy' => array( 'التوصيل والشحن', '<!-- wp:heading --><h2>توصيل مجاني داخل دمشق وريفها القريب</h2><!-- /wp:heading --><!-- wp:paragraph --><p>منوصّل مجاناً لباب البيت بالمزة والميدان ومشروع دمر وكفرسوسة وجرمانا وصحنايا وقدسيا وضاحية قدسيا وغيرها، مع فحص الجهاز عند الاستلام.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>ريف دمشق الأبعد</h2><!-- /wp:heading --><!-- wp:paragraph --><p>التل، قطنا، الكسوة، دوما، حرستا، الزبداني، يبرود، النبك وغيرها: رسم توصيل رمزي منقلك ياه على واتساب قبل التأكيد.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>باقي المحافظات السورية</h2><!-- /wp:heading --><!-- wp:paragraph --><p>منشحن لحلب وحمص وحماة واللاذقية وطرطوس ودرعا والسويداء وباقي المحافظات مع شركات شحن موثوقة وتغليف آمن، والتكلفة حسب حجم الجهاز.</p><!-- /wp:paragraph -->' ),
 	);
-	$slugs = array( 'bundle' => 'bundle-builder', 'warranty' => 'warranty', 'shipping' => 'shipping-policy' );
-	$ids   = array();
-	foreach ( $pages as $key => $page ) {
-		$existing = get_page_by_path( $slugs[ $key ] );
-		$id       = $existing ? $existing->ID : wp_insert_post(
+	$ids = array();
+	foreach ( $pages as $slug => $page ) {
+		$existing = get_page_by_path( $slug );
+		$ids[]    = (int) ( $existing ? $existing->ID : wp_insert_post(
 			array(
 				'post_type'    => 'page',
 				'post_status'  => 'publish',
-				'post_name'    => $slugs[ $key ],
+				'post_name'    => $slug,
 				'post_title'   => $page[0],
 				'post_content' => $page[1],
 				'meta_input'   => array( '_bk_demo' => 1 ),
 			)
-		);
-		if ( $page[2] && $id ) {
-			update_post_meta( $id, '_wp_page_template', $page[2] );
-		}
-		$ids[ $key ] = (int) $id;
+		) );
 	}
-	update_option( 'bk_warranty_page_id', $ids['warranty'] );
 
-	// Footer "customer service" menu.
-	$menu = wp_get_nav_menu_object( 'خدمة العملاء' );
+	// Footer "ordering & delivery" menu.
+	$menu = wp_get_nav_menu_object( 'الطلب والتوصيل' );
 	if ( ! $menu ) {
-		$menu_id = wp_create_nav_menu( 'خدمة العملاء' );
+		$menu_id = wp_create_nav_menu( 'الطلب والتوصيل' );
 		if ( ! is_wp_error( $menu_id ) ) {
-			$links = array( $ids['warranty'], $ids['bundle'], $ids['shipping'], wc_get_page_id( 'myaccount' ) );
-			foreach ( array_filter( $links, static fn( $id ) => $id > 0 ) as $page_id ) {
+			foreach ( array_filter( $ids ) as $page_id ) {
 				wp_update_nav_menu_item( $menu_id, 0, array( 'menu-item-object' => 'page', 'menu-item-object-id' => $page_id, 'menu-item-type' => 'post_type', 'menu-item-status' => 'publish' ) );
 			}
 			$locations           = (array) get_theme_mod( 'nav_menu_locations', array() );
@@ -369,6 +361,95 @@ function bk_seed_pages(): void {
 			set_theme_mod( 'nav_menu_locations', $locations );
 		}
 	}
+}
+
+/**
+ * Demo photography: studio renders bundled in assets/demo/{SKU}.webp.
+ * Imported once into the media library and attached to products + categories.
+ */
+function bk_seed_import_image( string $file, string $title ): int {
+	$existing = get_posts( array( 'post_type' => 'attachment', 'post_status' => 'inherit', 'posts_per_page' => 1, 'fields' => 'ids', 'meta_key' => '_bk_demo_file', 'meta_value' => $file ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
+	if ( $existing ) {
+		return (int) $existing[0];
+	}
+	$path = BK_DIR . '/assets/demo/' . $file;
+	if ( ! is_readable( $path ) ) {
+		return 0;
+	}
+	require_once ABSPATH . 'wp-admin/includes/image.php';
+	$upload = wp_upload_bits( $file, null, (string) file_get_contents( $path ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	if ( ! empty( $upload['error'] ) ) {
+		return 0;
+	}
+	$id = wp_insert_attachment(
+		array(
+			'post_mime_type' => 'image/webp',
+			'post_title'     => $title,
+			'post_status'    => 'inherit',
+		),
+		$upload['file']
+	);
+	if ( ! $id || is_wp_error( $id ) ) {
+		return 0;
+	}
+	wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
+	update_post_meta( $id, '_wp_attachment_image_alt', $title );
+	update_post_meta( $id, '_bk_demo_file', $file );
+	update_post_meta( $id, '_bk_demo', 1 );
+	return (int) $id;
+}
+
+function bk_seed_images(): int {
+	$done = 0;
+	foreach ( bk_seed_products() as $p ) {
+		$product_id = wc_get_product_id_by_sku( $p[10] );
+		if ( ! $product_id || get_post_thumbnail_id( $product_id ) ) {
+			continue;
+		}
+		$image = bk_seed_import_image( $p[10] . '.webp', $p[0] );
+		if ( $image ) {
+			set_post_thumbnail( $product_id, $image );
+			++$done;
+		}
+	}
+	// Category thumbnails = a representative product render.
+	$map = array(
+		'large-appliances'             => 'RM-RF21NF-WD',
+		'refrigerators-freezers'       => 'HF-RF16NF-INV',
+		'double-door-inverter-fridges' => 'AR-RF18DI-INV',
+		'chest-upright-freezers'       => 'HF-CF300',
+		'mini-bar-fridges'             => 'HD-MB90',
+		'washing-machines'             => 'HF-WM8DD',
+		'automatic-washers'            => 'AR-WD10',
+		'twin-tub-washers'             => 'HD-TT10',
+		'dishwashers'                  => 'HF-DW12',
+		'cookers-ovens'                => 'AR-GC5090',
+		'kitchen-appliances'           => 'RM-MW25G',
+		'microwaves'                   => 'RM-MW25G',
+		'air-fryers'                   => 'HF-AF55',
+		'blenders-food-processors'     => 'AR-FP600',
+		'tvs-entertainment'            => 'RM-65AND4K',
+		'tvs'                          => 'AR-55AND4K',
+		'smart-android-tvs'            => 'AR-55AND4K',
+		'tvs-built-in-receiver'        => 'HF-43SR',
+		'cooling-heating'              => 'AR-AC18INV',
+		'air-conditioners'             => 'HF-AC12INV',
+		'inverter-air-conditioners'    => 'HF-AC12INV',
+		'fans'                         => 'HD-RF16LI',
+		'rechargeable-fans'            => 'HD-RF16LI',
+		'heaters'                      => 'AR-OH11',
+		'home-garment-care'            => 'RM-VC2000',
+		'vacuum-cleaners'              => 'RM-VC2000',
+		'irons'                        => 'HD-SI2200',
+	);
+	foreach ( $map as $slug => $sku ) {
+		$term       = get_term_by( 'slug', $slug, 'product_cat' );
+		$product_id = wc_get_product_id_by_sku( $sku );
+		if ( $term && $product_id && ! get_term_meta( $term->term_id, 'thumbnail_id', true ) ) {
+			update_term_meta( $term->term_id, 'thumbnail_id', (int) get_post_thumbnail_id( $product_id ) );
+		}
+	}
+	return $done;
 }
 
 /**
@@ -382,6 +463,7 @@ function bk_seed_run(): array {
 	$ids     = bk_seed_terms();
 	$created = bk_seed_products_run( $ids );
 	bk_seed_pages();
+	bk_seed_images();
 	delete_option( 'bk_rewrite_version' ); // Flush rewrites on next load.
 	bk_cache_bump();
 	return array( 'products' => $created );
@@ -391,9 +473,13 @@ function bk_seed_run(): array {
  * Remove everything tagged as demo (products are trashed, not hard-deleted).
  */
 function bk_seed_remove(): array {
-	$posts = get_posts( array( 'post_type' => array( 'product', 'page' ), 'post_status' => 'any', 'posts_per_page' => -1, 'fields' => 'ids', 'meta_key' => '_bk_demo', 'meta_value' => 1 ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
+	$posts = get_posts( array( 'post_type' => array( 'product', 'page', 'attachment' ), 'post_status' => 'any', 'posts_per_page' => -1, 'fields' => 'ids', 'meta_key' => '_bk_demo', 'meta_value' => 1 ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
 	foreach ( $posts as $id ) {
-		wp_trash_post( $id );
+		if ( 'attachment' === get_post_type( $id ) ) {
+			wp_delete_attachment( $id, true );
+		} else {
+			wp_trash_post( $id );
+		}
 	}
 	$terms = get_terms( array( 'taxonomy' => array( 'product_cat', BK_BRAND_TAX ), 'hide_empty' => false, 'meta_key' => '_bk_demo', 'meta_value' => 1, 'fields' => 'all' ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
 	foreach ( is_wp_error( $terms ) ? array() : $terms as $term ) {

@@ -50,10 +50,9 @@ function bk_general_settings_schema(): array {
 		__( 'هوية المتجر', 'baytkahraba' )          => array(
 			'store_name'    => array( __( 'اسم المتجر', 'baytkahraba' ), 'text' ),
 			'store_tagline' => array( __( 'الشعار الفرعي تحت الاسم', 'baytkahraba' ), 'text' ),
-			'top_bar_message' => array( __( 'رسالة الشريط العلوي', 'baytkahraba' ), 'text' ),
 			'hero_title'    => array( __( 'عنوان الواجهة الرئيسية', 'baytkahraba' ), 'text' ),
 			'hero_subtitle' => array( __( 'وصف الواجهة الرئيسية', 'baytkahraba' ), 'textarea' ),
-			'hero_image_id' => array( __( 'صورة الواجهة (LCP)', 'baytkahraba' ), 'image', __( 'يُفضّل 1600×900 بصيغة WebP.', 'baytkahraba' ) ),
+			'hero_image_id' => array( __( 'صورة الواجهة (LCP)', 'baytkahraba' ), 'image', __( 'اختياري — يُفضّل PNG/WebP بخلفية شفافة 1600×1000. إن تُرك فارغاً تُستخدم صورة صالة العرض المرفقة مع القالب.', 'baytkahraba' ) ),
 		),
 		__( 'التواصل والموقع (يُستخدم في Schema والواتساب)', 'baytkahraba' ) => array(
 			'phone'               => array( __( 'رقم الهاتف', 'baytkahraba' ), 'text' ),
@@ -71,7 +70,6 @@ function bk_general_settings_schema(): array {
 		),
 		__( 'المتجر و SEO', 'baytkahraba' )         => array(
 			'products_per_page' => array( __( 'عدد المنتجات في الصفحة', 'baytkahraba' ), 'number' ),
-			'compare_max'       => array( __( 'الحد الأقصى للمقارنة', 'baytkahraba' ), 'number' ),
 			'return_days'       => array( __( 'مدة الاسترجاع/الاستبدال (أيام)', 'baytkahraba' ), 'number' ),
 			'price_range'       => array( __( 'فئة الأسعار (Schema priceRange)', 'baytkahraba' ), 'text' ),
 			'schema_types'      => array( __( 'أنواع Schema للمتجر', 'baytkahraba' ), 'text', 'Store,HardwareStore,ElectronicsStore' ),

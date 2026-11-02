@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BK_VERSION', '1.1.0' );
+define( 'BK_VERSION', '2.0.0' );
 define( 'BK_DIR', get_template_directory() );
 define( 'BK_URI', get_template_directory_uri() );
 define( 'BK_REST_NS', 'bk/v1' );
@@ -40,10 +40,9 @@ $bk_commerce_modules = array(
 	'rest-api',
 	'syria-pricing-sync',
 	'syria-shipping-checkout',
+	'catalog-mode',
 	'seo-content-templates',
 	'seo-geo-engine',
-	'bundle-builder',
-	'warranty-registry',
 	'seed-demo-data',
 );
 

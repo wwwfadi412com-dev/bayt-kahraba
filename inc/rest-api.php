@@ -1,10 +1,8 @@
 <?php
 /**
- * Catalog REST API (namespace bk/v1) for the Alpine.js front end:
- *   GET /products      instant filtering & AJAX pagination (server-rendered cards)
+ * Catalog REST API (namespace bk/v1):
+ *   GET /products      filtered catalog pages (server-rendered cards)
  *   GET /search        live search with Syrian dialect synonyms + SKU / model match
- *   GET /quick-view/ID quick-view modal markup
- *   GET /compare       side-by-side comparison data
  *
  * Read endpoints are public and cache-friendly (no nonce required).
  *
@@ -46,28 +44,6 @@ add_action(
 			)
 		);
 
-		register_rest_route(
-			BK_REST_NS,
-			'/quick-view/(?P<id>\d+)',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => '__return_true',
-				'callback'            => 'bk_rest_quick_view',
-			)
-		);
-
-		register_rest_route(
-			BK_REST_NS,
-			'/compare',
-			array(
-				'methods'             => WP_REST_Server::READABLE,
-				'permission_callback' => '__return_true',
-				'callback'            => 'bk_rest_compare',
-				'args'                => array(
-					'ids' => array( 'type' => 'string', 'required' => true ),
-				),
-			)
-		);
 	}
 );
 
@@ -100,7 +76,7 @@ function bk_rest_search( WP_REST_Request $request ): WP_REST_Response {
 	}
 
 	$data = bk_remember(
-		'search:' . bk_normalize_arabic( $q ),
+		'search2:' . bk_normalize_arabic( $q ),
 		static function () use ( $q ) {
 			$query = new WP_Query(
 				array(
@@ -123,7 +99,7 @@ function bk_rest_search( WP_REST_Request $request ): WP_REST_Response {
 					'id'    => $product->get_id(),
 					'name'  => $product->get_name(),
 					'url'   => $product->get_permalink(),
-					'price' => $product->get_price_html(),
+					'price' => function_exists( 'bk_price_html' ) ? bk_price_html( $product, 'text-[15px]' ) : $product->get_price_html(),
 					'image' => (string) ( wp_get_attachment_image_url( $product->get_image_id(), 'bk-thumb' ) ?: bk_placeholder_src() ),
 					'brand' => $brand ? $brand->name : '',
 					'model' => (string) $product->get_meta( '_bk_model_code' ),
@@ -169,63 +145,4 @@ function bk_rest_search( WP_REST_Request $request ): WP_REST_Response {
 	$response = rest_ensure_response( $data );
 	$response->header( 'Cache-Control', 'public, max-age=300' );
 	return $response;
-}
-
-function bk_rest_quick_view( WP_REST_Request $request ) {
-	$product = wc_get_product( (int) $request['id'] );
-	if ( ! $product || 'publish' !== $product->get_status() || ! $product->is_visible() ) {
-		return new WP_Error( 'bk_not_found', __( 'المنتج غير متوفر', 'baytkahraba' ), array( 'status' => 404 ) );
-	}
-	return rest_ensure_response(
-		array(
-			'id'   => $product->get_id(),
-			'html' => bk_part( 'template-parts/product/quick-view', array( 'product' => $product ), true ),
-		)
-	);
-}
-
-/**
- * Normalized comparison payload for one product.
- */
-function bk_compare_payload( WC_Product $product ): array {
-	$id    = $product->get_id();
-	$power = bk_get_product_power( $id );
-	$brand = bk_get_product_brand( $id );
-	$cat   = bk_product_primary_category( $id );
-	$specs = bk_product_specs( $product );
-
-	return array(
-		'id'          => $id,
-		'name'        => $product->get_name(),
-		'url'         => $product->get_permalink(),
-		'image'       => (string) ( wp_get_attachment_image_url( $product->get_image_id(), 'bk-card' ) ?: bk_placeholder_src() ),
-		'price'       => (float) $product->get_price(),
-		'price_html'  => $product->get_price_html(),
-		'brand'       => $brand ? $brand->name : '—',
-		'category'    => $cat ? implode( ' › ', wp_list_pluck( bk_category_chain( $cat->term_id ), 'name' ) ) : '—',
-		'warranty'    => bk_product_warranty( $product ),
-		'wattage'     => $power['wattage'],
-		'ampere'      => $power['ampere'],
-		'power'       => $power['label'] ?: '—',
-		'power_class' => $power['class'],
-		'capacity'    => $specs['capacity']['value'] ?? '—',
-		'dimensions'  => $specs['dims']['value'] ?? '—',
-		'model'       => $specs['model']['value'] ?? '—',
-		'in_stock'    => $product->is_in_stock(),
-		'stock'       => $product->is_in_stock() ? __( 'متوفر في المحل', 'baytkahraba' ) : __( 'غير متوفر حالياً', 'baytkahraba' ),
-		'purchasable' => $product->is_purchasable() && $product->is_type( 'simple' ),
-	);
-}
-
-function bk_rest_compare( WP_REST_Request $request ): WP_REST_Response {
-	$max = max( 2, (int) bk_option( 'compare_max', 4 ) );
-	$ids = array_slice( array_unique( array_filter( array_map( 'absint', explode( ',', (string) $request['ids'] ) ) ) ), 0, $max );
-	$out = array();
-	foreach ( $ids as $id ) {
-		$product = wc_get_product( $id );
-		if ( $product && 'publish' === $product->get_status() ) {
-			$out[] = bk_compare_payload( $product );
-		}
-	}
-	return rest_ensure_response( array( 'products' => $out ) );
 }

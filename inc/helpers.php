@@ -35,11 +35,9 @@ function bk_settings_defaults(): array {
 		'price_range'         => '$$',
 		'return_days'         => 7,
 		'schema_types'        => 'Store,HardwareStore,ElectronicsStore',
-		'top_bar_message'     => 'توصيل مجاني لباب البيت داخل دمشق وريفها القريب — وبنفس سعر المحل',
-		'compare_max'         => 4,
 		'products_per_page'   => 24,
-		'hero_title'          => 'كهرباء أقل. بيت أكمل.',
-		'hero_subtitle'       => 'كل جهاز عندنا يأتيك ببطاقة واضحة: كم واط، كم أمبير، وهل يعمل على الطاقة الشمسية. اختر بثقة، بسعر المحل نفسه، مع كفالة الوكيل الحقيقية.',
+		'hero_title'          => 'كل أجهزة بيتك، بسعر المحل.',
+		'hero_subtitle'       => 'برادات، غسالات، شاشات ومكيفات من الوكلاء الرسميين. اختار جهازك، ابعتلنا على واتساب، ومنوصلّك ياه لباب البيت.',
 		'hero_image_id'       => 0,
 	);
 }
@@ -332,7 +330,7 @@ function bk_term_image_id( int $term_id, string $meta_key = 'thumbnail_id' ): in
  */
 function bk_placeholder_src(): string {
 	// Transparent "technical drawing": ink line art + volt bolt, sits on the grid-paper plates.
-	$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><g fill="none" stroke="#121212" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="135" y="80" width="130" height="240" rx="18"/><path d="M135 165h130M165 112v26M165 192v44"/></g><path d="M216 222l-20 30h15l-6 24 22-33h-15l4-21z" fill="#FF5B1F"/></svg>';
+	$svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#F1EFEA"/><g fill="none" stroke="#B9B5AC" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="140" y="85" width="120" height="230" rx="16"/><path d="M140 165h120M168 112v24M168 190v40"/></g></svg>';
 	return 'data:image/svg+xml;base64,' . base64_encode( $svg ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions
 }
 
@@ -377,6 +375,9 @@ function bk_icon( string $name, string $class = 'size-5' ): string {
 		'vacuum'    => '<circle cx="8" cy="17" r="4"/><path d="M8 13V5a3 3 0 0 1 6 0v3M14 8l5 9M17 21h4"/>',
 		'solar'     => '<path d="M4 15h16l-2-9H6l-2 9ZM5 10.5h14M10 6l-1 9M14 6l1 9M12 15v5M8 20h8"/>',
 		'arrow-ul'  => '<path d="M17 17 7 7M7 15V7h8"/>',
+		'arrow'     => '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+		'chat'      => '<path d="M4 5h16v11H9l-5 4V5Z"/>',
+		'box'       => '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9ZM3 7.5 12 12m0 0 9-4.5M12 12v9"/>',
 		'whatsapp'  => '',
 	);
 
